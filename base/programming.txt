@@ -1,0 +1,3 @@
+I love programming.
+I like moving.
+I love creating apps that can run in a browser.
