@@ -126,3 +126,62 @@ if __name__ == '__main__':
     send_msg(urlinfo)
     print type(urlinfo)
     print urlinfo
+
+##
+g1-g3-op-v01
+/home/sa
+g1-g3-op-v02
+
+#!/usr/bin/env python
+#coding:utf-8
+
+import StringIO
+import pycurl
+import sys
+import os
+import time
+import json
+import socket
+import urllib
+import traceback
+
+class urlpass:
+    def __init__(self):
+        self.contents = ''
+    def body_callback(self,buf):
+        self.contents = self.contents + buf
+
+def urlgzip(input_url):
+    t = urlpass()
+    c = pycurl.Curl()
+    c.setopt(pycurl.WRITEFUNCTION,t.body_callback)
+    c.setopt(pycurl.PROXY, 'g1-g3-op-v01:7000/healthcheck')
+    c.setopt(pycurl.ENCODING, 'gzip')
+    c.setopt(pycurl.URL,input_url)
+    c.perform()
+
+
+    http_code      = c.getinfo(pycurl.HTTP_CODE)          #响应代码
+
+    url_monitor = {
+        'http_code':      [http_code, 'GAUGE'],
+    }
+
+    output = []
+    for key in url_monitor:
+        s = {}
+        s['endpoint'] = socket.gethostname()
+        s['timestamp'] = int(time.time())
+        s['step'] = 60
+        s['counterType'] = url_monitor[key][1]
+        s['metric'] = 'g1-g3-op-v01:7000/healthcheck'
+        s['value'] = url_monitor[key][0]
+        output.append(s)
+    return output
+
+if __name__ == "__main__":
+    input_url ='http://g1-g3-op-v01:7000/healthcheck'
+    urlinfo=urlgzip(input_url)
+    print json.dumps(urlinfo)
+    sys.stdout.flush()
+
