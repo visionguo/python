@@ -67,3 +67,14 @@ if __name__ == "__main__":
         print json.dumps(main(), indent=3)
     sys.stdout.flush()
 
+```
+方式：将 supervisor 管理进程的四个状态，转换成了数字输出
+目的：状态数字化，方便进行图形展示和报警
+
+0 代表 FATAL
+2 代表 STOPPED
+3 代表 RESTART
+5 代表 RUNNING
+6 代表 undefined
+
+```
