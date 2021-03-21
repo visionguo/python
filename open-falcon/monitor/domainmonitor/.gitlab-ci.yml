@@ -1,0 +1,31 @@
+stages:
+  - prepare
+  - build
+  - rsync
+
+prepare-docker:
+  stage: prepare
+  script:
+    - echo "prepare docker"
+
+build-code:
+  stage: build
+  script:
+    - echo "build docker"
+
+rsync-release:
+  stage: rsync
+  script:
+    - echo "rsync finish"
+
+pages:
+  stage: build
+  script:
+  - mkdocs build
+  - mv site public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
+

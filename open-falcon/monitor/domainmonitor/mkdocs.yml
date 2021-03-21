@@ -1,0 +1,9 @@
+site_name: SRE scripts Docs
+pages:
+  - Index: index.md
+  - Home: home.md
+  - User Guide:: 
+      - logcmd: logcmd.md
+      - domain_xxx: domain_xxx.md
+
+theme: readthedocs
