@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %} Business {% endblock %}
+{% block meta %}
+  {{ super() }}
+   <meta charset="utf-8">
+{% endblock %}
+{% block styles %}
+  {{ super() }}
+  <script src="/static/js/echarts.common.min.js"></script>
+{% endblock %}
+{% block page_content %}
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 100%;height: 900px;" ></div>
+
+    <script type="text/javascript">
+        // 通过dom id获取echart实例
+        var myChart = document.getElementById('main');
+        // 初始化echart实例
+        var myChart = echarts.init(myChart);
+
+        // 指定图表的配置项和数据
+        var option = {
+            title : {
+                text: '业务线({{ re|length }})',
+                //x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                show: true,
+                orient: 'horizontal',
+                left: '10%',
+                right: '0',
+            },
+            series : [
+                {
+                    name: '业务线',
+                    type: 'pie',
+                    selectedMode: 'multiple',
+                    radius : [0, '70%'],
+                    center: ['50%', '50%'],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    data:[
+                    {% for i in re %}
+                    { value: {{ i['subbusiness_count'] }}, name: '{{ i['business_name'] }} ' , selected:true},
+                    {% endfor %}
+                    ],
+                },
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表
+        myChart.setOption(option);
+        // 在浏览器大小改变时重置大小
+        //myChartContainer();
+         window.onresize = function () {
+            myChart.resize(
+            );
+         };
+    </script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}domain{% endblock %}
+{% block meta %}
+  {{ super() }}
+   <meta charset="utf-8">
+{% endblock %}
+{% block page_content %}
+    <H3> <a href="http://cmdb.xxx-int.com/asset/domainlist/" >需在cmdb平台上完善信息</a> </H3>
+    <table class="table table-hover">
+        <caption>无人认领</caption>
+        <tr class="active">
+            <th>id</th>
+            <th>domain</th>
+            <th>ip</th>
+            <th>use_for</th>
+            <th>person_duty</th>
+            <th>subbusiness_id</th>
+        </tr>
+        {% for i in re %}
+        <tr>
+             <td>{{ i[0] }}</td>
+             <td>{{ i[1] }}</td>
+             <td>{{ i[2] }}</td>
+             <td>{{ i[5] }}</td>
+             <td>{{ i[6] }}</td>
+             <td>{{ i[9] }}</td>
+         </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
