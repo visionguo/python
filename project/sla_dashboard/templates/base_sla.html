@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico" />
+    <!-- Generated: 2018-04-06 16:27:42 +0200 -->
+    <title>GuaZi SLA DashBoard</title>
+    <script src="/static/assets/js/require.min.js"></script>
+    <script>
+      requirejs.config({
+          baseUrl: '.'
+      });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/static/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/static/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/static/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/static/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Google Maps Plugin -->
+    <link href="/static/assets/plugins/maps-google/plugin.css" rel="stylesheet" />
+    <script src="/static/assets/plugins/maps-google/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/static/assets/plugins/input-mask/plugin.js"></script>
+  </head>
+  <body class="">
+    <div class="page">
+      <div class="page-main">
+        <div class="header py-4">
+          <div class="container">
+            <div class="d-flex">
+              <a class="header-brand" href="/">
+                <img src="/static/demo/brand/tabler.png" class="header-brand-img" alt="tabler logo">
+              </a>
+
+              <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
+                <span class="header-toggler-icon"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
+          <div class="container">
+            <div class="row align-items-center">
+
+              <div class="col-lg order-lg-first">
+                <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+
+                    <li>
+                    <a href="./overall_sla.html" class="nav-link "><i class="fe fe-check-square"></i>总体报表</a>
+                  </li>
+                    <li class="nav-item">
+                    <a href="./serviceline_sla.html" class="nav-link " ><i class="fe fe-home"></i>业务可用性报表</a>
+                  </li>
+                    <li class="nav-item">
+                    <a href="./base_sla.html" class="nav-link active " ><i class="fe fe-home"></i>基础资源可用性报表</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="my-3 my-md-5">
+          <div class="container">
+          <div class="card-body" >
+
+
+          <form action="http://sla.guazi-corp.com/base_sla.html" method="get" class="my-3 my-md-5">
+                  <div style="display: flex;align-items: flex-end;padding-bottom: 10px;padding-left: 20px;padding-top: 10px;background-color: white;" >
+
+
+
+                              <div class="col-3">
+                                  <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="timerate" value="n7" {% if  timerate !=  "n30"  and  timerate !=  "lm" %} checked{% endif %} >
+                                    <span class="custom-control-label">近一周</span>
+                                  </label>
+                                  <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="timerate" value="n30"  {% if  timerate ==  "n30" %}checked{% endif %}>
+                                    <span class="custom-control-label">当月</span>
+                                  </label>
+                                  <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="timerate" value="lm"  {% if  timerate ==  "lm" %}checked{% endif %}>
+                                    <span class="custom-control-label">上月</span>
+                                  </label>
+                              </div>
+
+                    <div class="col-2" >
+                         <button type="submit" class="btn btn-primary ml-auto" >SLA</button>
+                    </div>
+                    <div  style="font-size: 12px" class="col-6">{{ start }} TO {{ end }} </div>
+                  </div>
+    </form>
+
+
+ <div class="my-3 my-md-5" style="background-color: white">
+          <div class="container">
+            <div class="page-header">
+              <h1 class="page-title">
+                Zookeeper
+              </h1>
+            </div>
+
+
+              <div class="col-md-6 col-lg-12">
+                <div class="row">
+
+                  <div class="col-sm-6 col-lg-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="card-value float-right {% if base_zk_online_info[0] < 99.99 %} text-red {% else %}text-blue {% endif %}" >{{ base_zk_online_info[0] |round(3) }}%</div>
+                        <h3 class="mb-2">线上集群</h3>
+                        <div class="text-muted">Reliability</div>
+                      </div>
+                      <div class="card-chart-bg">
+                        <div id="chart-bg-users-onlinezk" style="height: 100%"></div>
+                      </div>
+                    </div>
+                    <script>
+                      require(['c3', 'jquery'], function (c3, $) {
+                      	$(document).ready(function() {
+                      		var chart = c3.generate({
+                      			bindto: '#chart-bg-users-onlinezk',
+                      			padding: {
+                      				bottom: -10,
+                      				left: -1,
+                      				right: -1
+                      			},
+                      			data: {
+                      				names: {
+                      					data1: '可用性'
+                      				},
+                      				columns: [
+                                        ['data1', {% for i in range( 0,(base_zk_online_info[2]|length) , 720) %}{{ (base_zk_online_info[2][i:i+720])|sum/base_zk_online_info[2][i:i+720]|length }},{% endfor %}]
+
+                      				],
+                      				type: 'area'
+                      			},
+                      			legend: {
+                      				show: false
+                      			},
+                      			transition: {
+                      				duration: 0
+                      			},
+                      			point: {
+                      				show: false
+                      			},
+                      			tooltip: {
+                      				format: {
+                      					title: function (x) {
+                      						return '';
+                      					}
+                      				}
+                      			},
+                      			axis: {
+                      				y: {
+                      					padding: {
+                      						bottom: 0,
+                      					},
+                      					show: false,
+                      					tick: {
+                      						outer: false
+                      					}
+                      				},
+                      				x: {
+                      					padding: {
+                      						left: 0,
+                      						right: 0
+                      					},
+                      					show: false
+                      				}
+                      			},
+                      			color: {
+                      				pattern: ['#467fcf']
+                      			}
+                      		});
+                      	});
+                      });
+                    </script>
+                  </div>
+
+
+                  <div class="col-sm-6 col-lg-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="card-value float-right {% if base_zk_pre_info[0] < 99.99 %} text-red {% else %}text-blue {% endif %}" >{{ base_zk_pre_info[0]|round(3) }}%</div>
+                        <h3 class="mb-2">预览集群</h3>
+                        <div class="text-muted">Reliability</div>
+                      </div>
+                      <div class="card-chart-bg">
+                        <div id="chart-bg-users-ylzk" style="height: 100%"></div>
+                      </div>
+                    </div>
+                    <script>
+                      require(['c3', 'jquery'], function (c3, $) {
+                      	$(document).ready(function() {
+                      		var chart = c3.generate({
+                      			bindto: '#chart-bg-users-ylzk',
+                      			padding: {
+                      				bottom: -10,
+                      				left: -1,
+                      				right: -1
+                      			},
+                      			data: {
+                      				names: {
+                      					data1: '可用性'
+                      				},
+                      				columns: [
+                      					['data1', {% for i in range( 0,(base_zk_pre_info[2]|length) , 720) %}{{ (base_zk_pre_info[2][i:i+720])|sum/base_zk_pre_info[2][i:i+720]|length }},{% endfor %}]
+                      				],
+                      				type: 'area'
+                      			},
+                      			legend: {
+                      				show: false
+                      			},
+                      			transition: {
+                      				duration: 0
+                      			},
+                      			point: {
+                      				show: false
+                      			},
+                      			tooltip: {
+                      				format: {
+                      					title: function (x) {
+                      						return '';
+                      					}
+                      				}
+                      			},
+                      			axis: {
+                      				y: {
+                      					padding: {
+                      						bottom: 0,
+                      					},
+                      					show: false,
+                      					tick: {
+                      						outer: false
+                      					}
+                      				},
+                      				x: {
+                      					padding: {
+                      						left: 0,
+                      						right: 0
+                      					},
+                      					show: false
+                      				}
+                      			},
+                      			color: {
+                      				pattern: ['#467fcf']
+                      			}
+                      		});
+                      	});
+                      });
+                    </script>
+                  </div>
+
+                  <div class="col-sm-6 col-lg-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="card-value float-right  text-red " >无数据</div>
+                        <h3 class="mb-2">测试集群</h3>
+                        <div class="text-muted">Reliability</div>
+                      </div>
+                      <div class="card-chart-bg">
+                        <div id="chart-bg-users-cszk" style="height: 100%"></div>
+                      </div>
+                    </div>
+                    <script>
+                      require(['c3', 'jquery'], function (c3, $) {
+                      	$(document).ready(function() {
+                      		var chart = c3.generate({
+                      			bindto: '#chart-bg-users-cszk',
+                      			padding: {
+                      				bottom: -10,
+                      				left: -1,
+                      				right: -1
+                      			},
+                      			data: {
+                      				names: {
+                      					data1: '可用性'
+                      				},
+                      				columns: [
+                      					['data1', {% for i in base_zk_test_info[2]|reverse %}{{ base_zk_test_info[2]|length }},{% endfor %}]
+                      				],
+                      				type: 'area'
+                      			},
+                      			legend: {
+                      				show: false
+                      			},
+                      			transition: {
+                      				duration: 0
+                      			},
+                      			point: {
+                      				show: false
+                      			},
+                      			tooltip: {
+                      				format: {
+                      					title: function (x) {
+                      						return '';
+                      					}
+                      				}
+                      			},
+                      			axis: {
+                      				y: {
+                      					padding: {
+                      						bottom: 0,
+                      					},
+                      					show: false,
+                      					tick: {
+                      						outer: false
+                      					}
+                      				},
+                      				x: {
+                      					padding: {
+                      						left: 0,
+                      						right: 0
+                      					},
+                      					show: false
+                      				}
+                      			},
+                      			color: {
+                      				pattern: ['#467fcf']
+                      			}
+                      		});
+                      	});
+                      });
+                    </script>
+                  </div>
+
+                </div>
+              </div>
+              </div>
+</div>
+
+
+<div class="my-3 my-md-5" style="background-color: white">
+          <div class="container">
+            <div class="page-header">
+              <h1 class="page-title">
+                ETCD
+              </h1>
+            </div>
+
+             <div class="col-md-6 col-lg-12">
+                <div class="row">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="card-value float-right {% if base_etcd_online_info[0] < 99.99 %} text-red {% else %}text-blue {% endif %}" >{{ base_etcd_online_info[0] |round(3) }}%</div>
+                        <h3 class="mb-2">线上集群</h3>
+                        <div class="text-muted">Reliability</div>
+                      </div>
+                      <div class="card-chart-bg">
+                        <div id="chart-bg-users-onlineetcd" style="height: 100%"></div>
+                      </div>
+                    </div>
+                    <script>
+                      require(['c3', 'jquery'], function (c3, $) {
+                      	$(document).ready(function() {
+                      		var chart = c3.generate({
+                      			bindto: '#chart-bg-users-onlineetcd',
+                      			padding: {
+                      				bottom: -10,
+                      				left: -1,
+                      				right: -1
+                      			},
+                      			data: {
+                      				names: {
+                      					data1: '可用性'
+                      				},
+                      				columns: [
+                                        ['data1', {% for i in range( 0,(base_etcd_online_info[2]|length) , 720) %}{{ (base_etcd_online_info[2][i:i+720])|sum/base_etcd_online_info[2][i:i+720]|length }},{% endfor %}]
+
+                      				],
+                      				type: 'area'
+                      			},
+                      			legend: {
+                      				show: false
+                      			},
+                      			transition: {
+                      				duration: 0
+                      			},
+                      			point: {
+                      				show: false
+                      			},
+                      			tooltip: {
+                      				format: {
+                      					title: function (x) {
+                      						return '';
+                      					}
+                      				}
+                      			},
+                      			axis: {
+                      				y: {
+                      					padding: {
+                      						bottom: 0,
+                      					},
+                      					show: false,
+                      					tick: {
+                      						outer: false
+                      					}
+                      				},
+                      				x: {
+                      					padding: {
+                      						left: 0,
+                      						right: 0
+                      					},
+                      					show: false
+                      				}
+                      			},
+                      			color: {
+                      				pattern: ['#467fcf']
+                      			}
+                      		});
+                      	});
+                      });
+                    </script>
+                  </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="card-value float-right {% if base_etcd_pre_info[0] < 99.99 %} text-red {% else %}text-blue {% endif %}" >{{ base_etcd_pre_info[0] |round(3) }}%</div>
+                        <h3 class="mb-2">pre集群</h3>
+                        <div class="text-muted">Reliability</div>
+                      </div>
+                      <div class="card-chart-bg">
+                        <div id="chart-bg-users-preetcd" style="height: 100%"></div>
+                      </div>
+                    </div>
+                    <script>
+                      require(['c3', 'jquery'], function (c3, $) {
+                      	$(document).ready(function() {
+                      		var chart = c3.generate({
+                      			bindto: '#chart-bg-users-preetcd',
+                      			padding: {
+                      				bottom: -10,
+                      				left: -1,
+                      				right: -1
+                      			},
+                      			data: {
+                      				names: {
+                      					data1: '可用性'
+                      				},
+                      				columns: [
+                                        ['data1', {% for i in range( 0,(base_etcd_pre_info[2]|length) , 720) %}{{ (base_etcd_pre_info[2][i:i+720])|sum/base_etcd_pre_info[2][i:i+720]|length }},{% endfor %}]
+
+                      				],
+                      				type: 'area'
+                      			},
+                      			legend: {
+                      				show: false
+                      			},
+                      			transition: {
+                      				duration: 0
+                      			},
+                      			point: {
+                      				show: false
+                      			},
+                      			tooltip: {
+                      				format: {
+                      					title: function (x) {
+                      						return '';
+                      					}
+                      				}
+                      			},
+                      			axis: {
+                      				y: {
+                      					padding: {
+                      						bottom: 0,
+                      					},
+                      					show: false,
+                      					tick: {
+                      						outer: false
+                      					}
+                      				},
+                      				x: {
+                      					padding: {
+                      						left: 0,
+                      						right: 0
+                      					},
+                      					show: false
+                      				}
+                      			},
+                      			color: {
+                      				pattern: ['#467fcf']
+                      			}
+                      		});
+                      	});
+                      });
+                    </script>
+                  </div>
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="card-value float-right  text-red " >无数据</div>
+                        <h3 class="mb-2">测试集群</h3>
+                        <div class="text-muted">Reliability</div>
+                      </div>
+                      <div class="card-chart-bg">
+                        <div id="chart-bg-users-testetcd" style="height: 100%"></div>
+                      </div>
+                    </div>
+                    <script>
+                      require(['c3', 'jquery'], function (c3, $) {
+                      	$(document).ready(function() {
+                      		var chart = c3.generate({
+                      			bindto: '#chart-bg-users-testetcd',
+                      			padding: {
+                      				bottom: -10,
+                      				left: -1,
+                      				right: -1
+                      			},
+                      			data: {
+                      				names: {
+                      					data1: '可用性'
+                      				},
+                      				columns: [
+                                        ['data1', {% for i in range( 0,(base_etcd_test_info[2]|length) , 720) %}{{ (base_etcd_test_info[2][i:i+720])|sum/base_etcd_test_info[2][i:i+720]|length }},{% endfor %}]
+
+                      				],
+                      				type: 'area'
+                      			},
+                      			legend: {
+                      				show: false
+                      			},
+                      			transition: {
+                      				duration: 0
+                      			},
+                      			point: {
+                      				show: false
+                      			},
+                      			tooltip: {
+                      				format: {
+                      					title: function (x) {
+                      						return '';
+                      					}
+                      				}
+                      			},
+                      			axis: {
+                      				y: {
+                      					padding: {
+                      						bottom: 0,
+                      					},
+                      					show: false,
+                      					tick: {
+                      						outer: false
+                      					}
+                      				},
+                      				x: {
+                      					padding: {
+                      						left: 0,
+                      						right: 0
+                      					},
+                      					show: false
+                      				}
+                      			},
+                      			color: {
+                      				pattern: ['#467fcf']
+                      			}
+                      		});
+                      	});
+                      });
+                    </script>
+                  </div>
+
+
+                </div>
+              </div>
+
+
+
+              </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="row align-items-center flex-row-reverse">
+            <div class="col-auto ml-lg-auto">
+              <div class="row align-items-center">
+                <div class="col-auto">
+
+                </div>
+
+              </div>
+            </div>
+            <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
+              Copyright © 2018  All rights reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

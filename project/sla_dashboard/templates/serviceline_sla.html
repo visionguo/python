@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico" />
+    <!-- Generated: 2018-04-06 16:27:42 +0200 -->
+    <title>GuaZi SLA DashBoard</title>
+    <script src="/static/assets/js/require.min.js"></script>
+    <script>
+      requirejs.config({
+          baseUrl: '.'
+      });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/static/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/static/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/static/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/static/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Google Maps Plugin -->
+    <link href="/static/assets/plugins/maps-google/plugin.css" rel="stylesheet" />
+    <script src="/static/assets/plugins/maps-google/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/static/assets/plugins/input-mask/plugin.js"></script>
+  </head>
+  <body class="">
+    <div class="page">
+      <div class="page-main">
+        <div class="header py-4">
+          <div class="container">
+            <div class="d-flex">
+              <a class="header-brand" href="./">
+                <img src="/static/demo/brand/tabler.png" class="header-brand-img" alt="tabler logo">
+              </a>
+
+              <a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse">
+                <span class="header-toggler-icon"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="header collapse d-lg-flex p-0" id="headerMenuCollapse">
+          <div class="container">
+            <div class="row align-items-center">
+
+              <div class="col-lg order-lg-first">
+                <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+                    <li>
+                    <a href="./overall_sla.html" class="nav-link"><i class="fe fe-check-square"></i>总体报表</a>
+                  </li>
+                    <li class="nav-item">
+                    <a href="./serviceline_sla.html" class="nav-link active" ><i class="fe fe-home"></i>业务可用性报表</a>
+                  </li>
+                     <li class="nav-item">
+                    <a href="./base_sla.html" class="nav-link " ><i class="fe fe-home"></i>基础资源可用性报表</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="my-3 my-md-5">
+          <div class="container">
+          <div class="card-body" >
+
+
+ <form action="http://sla.guazi-corp.com/serviceline_sla.html" method="get" class="col-12">
+                  <div style="display: flex;align-items: flex-end;padding-bottom: 10px;padding-left: 20px;padding-top: 10px;" >
+
+                     <div style="width: 70px">
+                         <label class="form-label">PROXY集群</label>
+                    </div>
+                    <div class="col-3">
+                      <!--  <label class="form-label">Proxy集群</label>   -->
+                        {#  <select name="proxy" id="select-proxy" class="form-control custom-select">
+                            {% for i in proxylist %}
+                          <option value="{{ i }}" {% if proxy_name ==  i  %} selected="selected"{% endif %} >{{ i }}</option>
+
+                            {% endfor %}
+                        </select>#}
+                     <select name="proxy" id="select-proxy"  class="form-control custom-select">
+                            {% for i in proxydict %}
+                          <option value="{{ i }}" {% if proxy_name ==  i  %} selected="selected"{% endif %} >{{ i }}({{proxydict[i]}})</option>
+
+                            {% endfor %}
+                        </select>
+
+                    </div>
+                              <div class="col-3">
+                                  <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="timerate" value="n7" {% if  timerate !=  "n30"  and  timerate !=  "lm" %} checked{% endif %} >
+                                    <span class="custom-control-label">近一周</span>
+                                  </label>
+                                  <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="timerate" value="n30"  {% if  timerate ==  "n30" %}checked{% endif %}>
+                                    <span class="custom-control-label">当月</span>
+                                  </label>
+                                  <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="timerate" value="lm"  {% if  timerate ==  "lm" %}checked{% endif %}>
+                                    <span class="custom-control-label">上月</span>
+                                  </label>
+                              </div>
+
+                    <div class="col-2" >
+                         <button type="submit" class="btn btn-primary ml-auto" >SLA</button>
+                    </div>
+
+                  </div>
+    </form>
+
+
+
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header" >
+                    {% if proxy_name is none%}<h5 > ↑ 请选择集群名查询!</h5>{% else %}<h3 class="card-title">{{ proxy_name }}报表明细</h3>{% endif %}
+                  </div>
+                  <div class="table-responsive">
+                   {% if timerate is not none and proxy_name is not none %}
+                    <table class="table card-table table-vcenter text-nowrap">
+                      <thead>
+                        <tr>
+                          <th style="font-weight: bold " >域名</th>
+                          <th style="font-weight: bold ">本周期可用性%<br><font style="font-size: 6px;font-weight: lighter" >From {{ a[0][3] }}<br> To {{ a[0][4] }}</font></th>
+                          <th style="font-weight: bold ">占比</th>
+                            <th style="font-weight: bold ">贡献值</th>
+                           {% if timerate != 'lm' %}
+                          <th style="font-weight: bold ">上周期可用性%<br><font style="font-size: 6px;font-weight: lighter" >From {{ a[1][3] }}<br> To {{ a[1][4] }}</font></th>
+                            <th style="font-weight: bold ">环比涨跌幅%<br><font style="font-size: 6px;font-weight: lighter" >(本周期比上周期涨跌幅)</font></th>
+                            {% endif %}
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      {% for i in  range((a[0][0])|length) %}
+                       <tr>
+                        <td>{% if timerate == 'n30' %}<a href="http://kibana.dns.guazi.com/app/kibana#/dashboard/a0f9be50-d046-11e8-a663-8d5731c1fbb1?_g=(filters:!(),refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-30d,mode:quick,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(darkTheme:!f),panels:!((col:1,id:'6dc89140-d042-11e8-a663-8d5731c1fbb1',panelIndex:1,row:3,size_x:12,size_y:3,type:visualization),(col:1,id:b04ec5c0-d5a6-11e8-a663-8d5731c1fbb1,panelIndex:2,row:1,size_x:4,size_y:2,type:visualization)),query:(language:lucene,query:%22{{  a[0][0][i]["domain"] }}%22),timeRestore:!f,title:%E5%9F%9F%E5%90%8D%E5%8E%86%E5%8F%B2%E5%8F%AF%E7%94%A8%E6%80%A7%E6%9B%B2%E7%BA%BF,uiState:(P-1:(vis:(legendOpen:!f)),P-2:(vis:(defaultColors:('0+-+100':'rgb(0,104,55)')))),viewMode:view)" >{% else %}  <a href="http://kibana.dns.guazi.com/app/kibana#/dashboard/a0f9be50-d046-11e8-a663-8d5731c1fbb1?_g=(filters:!(),refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(darkTheme:!f),panels:!((col:1,id:'6dc89140-d042-11e8-a663-8d5731c1fbb1',panelIndex:1,row:3,size_x:12,size_y:3,type:visualization),(col:1,id:b04ec5c0-d5a6-11e8-a663-8d5731c1fbb1,panelIndex:2,row:1,size_x:4,size_y:2,type:visualization)),query:(language:lucene,query:%22{{  a[0][0][i]["domain"] }}%22),timeRestore:!f,title:%E5%9F%9F%E5%90%8D%E5%8E%86%E5%8F%B2%E5%8F%AF%E7%94%A8%E6%80%A7%E6%9B%B2%E7%BA%BF,uiState:(P-1:(vis:(legendOpen:!f)),P-2:(vis:(defaultColors:('0+-+100':'rgb(0,104,55)')))),viewMode:view)" >{% endif %}{{  a[0][0][i]["domain"] }}</a></td>
+                       {% if ( a[0][0][i]["reliability"] ) < 99.9 %} <td style="color:#ff0000; font-weight: bold "> {% else  %} <td > {% endif %}
+                           {{  a[0][0][i]["reliability"] }}%</td>
+                       <td>{{  a[0][0][i]["rate"] }}%</td>
+                        <td>{{  a[0][0][i]["fact"] }}</td>
+                           {% if timerate != 'lm' %}
+                          {% if ( a[1][0][i]["reliability"] ) < 99.9 %} <td style="color:#ff0000; font-weight: bold "> {% else  %} <td > {% endif %}
+                           {{  a[1][0][i]["reliability"] }}%</td>
+                          {%   set huanbi=((a[0][0][i]["reliability"] -  a[1][0][i]["reliability"])/(a[1][0][i]["reliability"]+0.00001)*100) |round(3)%} {% if huanbi >=0 %}<td style="color: #00cc00;font-weight: bold ">↑{{ huanbi }}%</td>{% else %}<td style="color:#ff0000; font-weight: bold ">↓{{ huanbi }}%</td>{% endif %}
+                          {% endif %}
+
+
+
+                      {% endfor %}
+
+                     </tr>
+
+                       <tr>
+                        <td>集群总体可用性(合计):</td>
+                       {% if (a[0][1] ) < 99.9 %} <td style="color: red;font-weight: bold ;font-size: large"> {% else  %} <td > {% endif %} {{ a[0][1] }}%</td>
+                       <td></td>
+                       <td></td>
+                        {% if timerate != 'lm' %}
+                       {% if (a[1][1] ) < 99.9 %} <td  style="color: red;font-weight: bold ;font-size: large"> {% else  %} <td > {% endif %} {{ a[1][1] }}%</td>
+                        {%   set huanbi=((a[0][1] -  a[1][1])/(a[1][1]+0.00001)*100) |round(3)%} {% if huanbi >=0 %}<td  style="color: #00cc00;font-weight: bold ">↑{{ huanbi }}%</td>{% else %}<td style="color:#ff0000; font-weight: bold ">↓{{ huanbi }}%</td>{% endif %}
+                        {% endif %}
+
+
+                        </tr>
+
+
+
+                      </tbody>
+                    </table>
+                      {% endif %}
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="row align-items-center flex-row-reverse">
+            <div class="col-auto ml-lg-auto">
+              <div class="row align-items-center">
+                <div class="col-auto">
+
+                </div>
+
+              </div>
+            </div>
+            <div class="col-12 col-lg-auto mt-3 mt-lg-0 text-center">
+              Copyright © 2018  All rights reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
