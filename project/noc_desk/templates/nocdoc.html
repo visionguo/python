@@ -1,0 +1,546 @@
+
+
+{% extends "base.html" %}
+
+{% block js %}
+    <meta charset="utf-8">
+    <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block selfjs %}
+
+    <script>
+        requirejs.config({
+            baseUrl: '.'
+        });
+    </script>
+    <script>
+        // 提交表单
+        function delete_info(id) {
+            if (!id) {
+                alert('Error！');
+                return false;
+            }
+            // var form_data = new Array();
+
+            $.ajax(
+                {
+                    url: "/edit_action",
+                    data: {"id": id, "act": "del"},
+                    type: "post",
+                    beforeSend: function () {
+                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success: function (data) {
+                        if (data > 0) {
+                            alert('操作成功');
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+
+                            // document.location.href='world_system_notice.php'
+                            location.reload();
+                        }
+                        else {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error: function () {
+                        alert('请求出错');
+                    },
+                    complete: function () {
+                        // $('#tips').hide();
+                    }
+                });
+
+            return false;
+        }
+
+        // 编辑表单
+
+        function get_edit_info(id, textdesc, types) {
+            if (!id) {
+                alert('Error！');
+                return false;
+            }
+            // var form_data = new Array();
+
+            $.ajax(
+                {
+                    url: "/edit_actiontest",
+                    data: {"id": id, "act": "get", "textdesc": textdesc, "type": types},
+                    type: "post",
+
+                    dataType: "json",
+                    beforeSend: function () {
+                        // $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+
+                    success: function (data) {
+
+                        if (data) {
+
+                            // 解析json数据
+                            var data_obj = data;
+                            //var data_obj = eval("("+data+")");
+                            // 赋值
+
+
+                            //$("#caseidnnn").val(data_obj.serial_number);
+                            $("#edittitle_value").val(data_obj.title);
+                            $("#editpriorityid_value").val(data_obj.priority_id);
+
+                            //$("#priorityidnnn").val(data_obj.priority_id);
+                            $("#edittitle_text").val(data_obj.textdescn);
+                            $("#editpriorityid_text").val(data_obj.textdescn);
+                            console.log(data_obj);
+                            console.log(xxx);
+                            console.log(textdescnnn);
+
+
+                            // 将input元素设置为readonly
+                            //$('#user_id').attr("readonly","readonly")
+                            // location.reload();
+                        }
+                        else {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            //  alert('操作失败');
+                        }
+                    },
+                    error: function () {
+                        alert('get_edit_info请求出错');
+                    },
+                    complete: function () {
+                        // $('#tips').hide();
+                    }
+                });
+
+            return false;
+        }
+
+        // 提交表单
+        function check_form() {
+            console.log("s");
+
+            //var user_id = $.trim($('#user_id').val());
+            var act = $.trim($('#act').val());
+
+            //if(!user_id)
+            //{
+            //    alert('用户ID不能为空！');
+            //    return false;
+            //}
+            var form_data = $('#add_title').serialize();
+            form_data = decodeURIComponent(form_data, true);
+
+            console.log(act)
+            // 异步提交数据到action/add_action.php页面
+            $.ajax(
+                {
+                    url: "/edit_action",
+                    data: {"form_data": form_data, "act": act},
+                    dataType: 'json',
+                    type: "POST",
+                    beforeSend: function () {
+                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+
+                    success: function (data) {
+                        if (data.res == 'success') {
+
+                            var msg = "添加";
+                            if (act == "edit") msg = "编辑";
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，" + msg + "成功！</span>");
+                            // document.location.href='system_notice.php'
+                            alert(msg + "OK！");
+                            location.reload();
+                        }
+                        else {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error: function () {
+
+                        alert('请求出错');
+                    },
+                    complete: function () {
+                        $('#acting_tips').hide();
+                    }
+                });
+
+            return false;
+        }
+
+        $(function () {
+            $('#edittitle').on('hide.bs.modal', function () {
+                // 关闭时清空edit状态为add
+                $("#act").val("add");
+                location.reload();
+            })
+        });
+    </script>
+{% endblock %}
+
+{% block noc %}
+    <!-- Dashboard Core -->
+
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-3 order-lg-1 mb-4">
+
+                <a href="/noclist.html" class="btn btn-block btn-primary mb-6">
+                    << 返回故障列表页
+                </a>
+                <!-- Getting started -->
+                <div class="list-group list-group-transparent mb-0">
+                    <a href="#" class="list-group-item list-group-item-action active"><span class="icon mr-3"><i
+                            class="fe fe-flag"></i></span>查看报告详情</a>
+                </div>
+                <!-- Components -->
+                <div class="list-group list-group-transparent mb-0">
+
+                    <a href="detail.html?sn={{ case_id }}" class="list-group-item list-group-item-action mb-6"><span
+                            class="icon mr-3"><i class="fe fe-feather"></i></span>编辑报告</a>
+                </div>
+
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-body">
+                        <ol class="text-wrap p-lg-6">
+                            <div class="container"></div>
+
+                            <h3 class="mt-0 mb-4">NOC{{ noc_info.serial_number }}</h3><br>
+
+                            <h6>故障标题：{{ noc_info.title }}</h6>
+                            <!-- <button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','故障标题','title')" data-target="#edittitle" >编辑</button>-->
+                            <!--<button type="button" class="btn btn-danger" onclick="return delete_info({id})">删除</button>-->
+
+
+                            <h6 id="setup-environment">故障级别：P{{ noc_info.priority_id }}</h6>
+                            <!--<<button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','故障级别','priority_id')" data-target="#editpriorityid" >编辑</button>-->
+
+
+                            <h6 id="setup-environment">责任业务线：
+                                {% for bu in b %}
+                                    {% if bu['id'] == noc_info.responsible_dept %} {{ bu['name'] }} {% endif %}
+                                {% endfor %}
+                                /
+                                {% for sbu in sb %}
+                                    {% if sbu['id'] == noc_info.responsible_team %}{{ sbu['name'] }} {% endif %}
+                                {% endfor %}
+                            </h6>
+                            <h6 id="setup-environment">故障原因：
+                                {% for reason in reasons_info %}
+                                   {% if reason['id'] == noc_info.noc_reason %}{{ reason['name'] }}{% endif %}
+                                {% endfor %}
+                                /
+                                {% for s_reason in sub_reasons_info %}
+                                {% if s_reason['id'] == noc_info.direct_reason_id %}{{ s_reason['name'] }}{% endif %}
+                            {% endfor %}
+                            </h6>
+                            <!--< <button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','故障业务线','responsible_team')" data-target="#editdeptteam" >编辑</button>-->
+
+                            <h6 id="setup-environment">事件概述：</h6>
+                            <ol><p style="white-space: pre-line;font-size: small">{{ noc_info.desc }}</p></ol>
+
+                            <div><h6 style="display: inline;">故障发生时间：</h6>
+                                <small>{{ start_time }} </small>
+                                <!--<<button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','故障发生时间','responsible_team')" data-target="#edittime" >编辑</button>-->
+                            </div>
+                            <div><h6 style="display: inline;">故障发现时间：</h6>
+                                <small>{{ found_time }} </small>
+                                <!--<<button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','故障发生时间','responsible_team')" data-target="#edittime" >编辑</button>-->
+                            </div>
+                            <div><h6 style="display: inline;">故障上报时间：</h6>
+                                <small> {{ noc_time }} </small>
+                                <!--<<button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','故障发生时间','responsible_team')" data-target="#edittime" >编辑</button>-->
+                            </div>
+                            <div><h6 style="display: inline;">故障恢复时间：</h6>
+                                <small>{{ fixed_time }} </small>
+                                <!--< <button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','故障发生时间','responsible_team')" data-target="#edittime" >编辑</button>-->
+                            </div>
+                            <h6 id="setup-environment">影响业务：</h6>
+                            <ol>
+                                <ul class="media-list">
+                                    {% for affected in affected_info %}
+                                        <li class="media mt-4" style="font-size: small;">
+                                            <div class="media-body" style="white-space: pre-line">
+                                                <strong>业务线: </strong> {% for bu in b if bu['id'] == affected.affected_dept %}{{ bu['name'] }}{% endfor %}/ {% for isb in sb if isb['id'] == affected.affected_team %}{{ isb['name'] }} {% endfor %}
+                                                <strong>用户属性：</strong>{% if affected.affected_customer_type == 1 %}外部{% else %}内部{% endif %}
+                                                <strong>影响用户：</strong>{{ affected.affected_scope }}
+                                                <strong>影响金额：</strong>{{ affected.affected_money }}
+                                                <strong>详细说明：</strong> {{ affected.detail }}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+
+                            </ol>
+
+                            <h6 id="setup-environment">事件过程回顾：
+                                <!--<<button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','事件回顾','detail')" data-target="#edittext" >编辑</button>--></h6>
+
+                            <ol>
+                                <p style="white-space: pre-line">
+                                    <small>{{ noc_info.detail }}</small>
+                                </p>
+                            </ol>
+
+                            <h6 id="setup-environment">问题分析：
+                                <!--< <button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info('{{case_id  }}','问题分析','desc')" data-target="#edittext" >编辑</button>--></h6>
+                            <ol>
+                                <p style="white-space: pre-line">
+                                    <small>{{ noc_info.analysis }}</small>
+                                </p>
+                            </ol>
+                            <h6 id="setup-environment">改进计划：</h6>
+                            <ol>
+                                <ul type="disc">
+                                    {% for imp in imp_info %}
+                                        <li>
+                                            <small>任务：{{ imp.title }}  |</small>
+                                            <small>归属团队：{{ imp.teamname }}  |</small>
+                                            <small>负责人：{{ imp.assignee }}  |</small>
+
+                                            <small>完成时间：{{ imp.completion_time }}  |</small>
+
+                                            <small>jira：{{ imp.jira_link }}  |</small>
+
+                                            <small>状态：{{ imp.status }}  |</small>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </ol>
+
+
+                            <!--<div class="alert alert-warning">
+                              <strong>Warning!</strong> all changes made in <code>_site/</code> folder would be overwriten on application build.
+                            </div>-->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <form method="post" action="act" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()"
+          style="margin: 10px;">
+        <div class="modal fade" id="edittitle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" style="display: inline">
+                                <input style="border-style:none;display: inline" value='' id="edittitle_text"
+                                       name="edittitle_text" readonly="readonly">
+                                <input type="text" class="form-control" name="edittitle_value" value=''
+                                       id="edittitle_value" style="display: inline">
+
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            提交
+                        </button>
+                        <span id="tip2"> </span>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div
+
+    </form>
+    <form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()"
+          style="margin: 20px;">
+
+        <div class="modal fade" id="editpriorityid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" style="display: inline">
+                                <input name="editpriorityid_text" style="border-style:none;display: inline" value=''
+                                       id="editpriorityid_text" readonly="readonly">
+                                <select name=case_priority class="form-control custom-select">
+                                    {% for p in noc_priority %}
+                                        <option value="{{ p[0] }}">{{ p[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            提交
+                        </button>
+                        <span id="tip2"> </span>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div
+
+    </form>
+    <form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()"
+          style="margin: 20px;">
+
+        <div class="modal fade" id="editdeptteam" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" style="display: inline">
+                                <input name="editdept_text" style="border-style:none;display: inline" value='一级业务线'
+                                       id="editdept_text" readonly="readonly">
+                                <select name=editdept_value class="form-control custom-select">
+                                    {% for bu in b %}
+                                        <option value="{{ bu['name'] }}"
+                                                {% if bu['name'] == case_dept %}selected="selected"{% endif %}>{{ bu['name'] }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input name="editteam_text" style="border-style:none;display: inline" value='二级业务线'
+                                       id="editteam_text" readonly="readonly">
+
+                                <select name=case_team class="form-control custom-select">
+                                    {% for sbu in sb %}
+                                        <option value="{{ sbu['name'] }}"
+                                                {% if sbu['name'] == case_team %}selected="selected"{% endif %}>{{ sbu['name'] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            提交
+                        </button>
+                        <span id="tip2"> </span>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div
+
+    </form>
+    <form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()"
+          style="margin: 20px;">
+
+        <div class="modal fade" id="editteam" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" style="display: inline">
+                                <input name="teamdescajax" style="border-style:none;display: inline" value=''
+                                       id="teamdescajax" readonly="readonly">
+                                <textarea type="text" class="form-control" name="teamajax" value='' id="teamtajax"
+                                          style="display: inline"></textarea>
+
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            提交
+                        </button>
+                        <span id="tip2"> </span>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div
+
+    </form>
+    <form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()"
+          style="margin: 20px;">
+
+        <div class="modal fade" id="editdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group" style="display: inline">
+                                <input name="datedescajax" style="border-style:none;display: inline" value=''
+                                       id="datedescajax" readonly="readonly">
+                                <textarea type="text" class="form-control" name="dateajax" value='' id="datetajax"
+                                          style="display: inline"></textarea>
+
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            提交
+                        </button>
+                        <span id="tip2"> </span>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div
+
+    </form>
+
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+prepare:
+- name: prepare
+  image: /library/python:3-latest
+  workdir: /med
+  version: v0.04
+  copy:
+    - ./requirements.txt /med/
+  run:
+    - yum install -y mysql-devel
+    - pip3 install -U -r requirements.txt
+
+build:
+- name: build
+  base: prepare
+  workdir: /med
+  copy:
+    - . /med/
+  run:
+    - echo nothing
+
+deploy:
+- name: deploy
+  base: build
+  domains: noc
+  workdir: /med
+  command: gunicorn -w 4 -b 0.0.0.0:5000 index:app
+  replicas: 1
+  rules:
+    - port: 5000
+      name: http

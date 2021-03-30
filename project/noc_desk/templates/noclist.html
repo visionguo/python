@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% block selfjs %}
+    <script>
+        function delcfm(url) {
+            //console.log(idx);
+            $('#url').val(url);
+            $('#delcfmModel').modal();
+        }
+
+        function delete_noc() {
+            var url = $.trim($("#url").val());
+            console.log(url);
+            if (!url) {
+                alert('Error！');
+                return false;
+            }
+            // var form_data = new Array();
+
+            $.ajax(
+                {
+                    url: "/edit_actiontest",
+                    data: {"id": url, "act": "delete"},
+                    type: "post",
+                    beforeSend: function () {
+                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success: function (data) {
+                        console.log(data.res);
+                        if (data.res == 'success') {
+
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+                            alert('操作成功');
+
+                            // document.location.href='world_system_notice.php'
+                            location.reload();
+                        }
+                        else {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error: function () {
+                        alert('请求出错');
+                    },
+                    complete: function () {
+                        // $('#tips').hide();
+                    }
+                });
+
+            return false;
+        }
+    </script>
+{% endblock %}
+{% block js %}
+    <meta charset="utf-8">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <link href="/static/assets/css/dashboard.css" rel="stylesheet"/>
+    <script src="/static/assets/js/dashboard.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block noc %}
+
+
+
+
+    <div class="card-body">
+        <!-- <div class="container"> -->
+
+
+        <div class="col-12">
+            <div>
+
+
+                <form style="float:left;display:inline;" class="col-5" action="noclist.html" method="get">
+                    <input type="search" class="form-control header-search" placeholder="Search…" tabindex="1"
+                           name="search">
+                    <div class="input-icon-addon">
+                        <i class="fe fe-search"></i>
+                    </div>
+                </form>
+
+
+                <nav style="float:right; padding: 0px" class="col-7" aria-label="Page navigation">
+                    <ul class="pagination pull-right">
+                        <li class="page-item">
+                            <a href="#" class="page-link">
+                                <span aria-hidden="true">共{{ noc_xxx.total }}条数据</span>
+                            </a>
+                        </li>
+                        {% if noc_xxx.has_prev %}
+                            <li class="page-item">
+                                <a href="?page={{ noc_xxx.prev_num }}" class="page-link" aria-label="Previous">
+                                    <span aria-hidden="true">«</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for s in range(1,noc_xxx.pages+1) %}
+                            <li class="page-item  {% if s == noc_xxx.page %}active{% endif %} "><a class="page-link"
+                                                                                                   href="?page={{ s }}">{{ s }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if noc_xxx.has_next %}
+                            <li class="page-item">
+                                <a href="?page={{ noc_xxx.next_num }}" class="page-link" aria-label="Next">
+                                    <span aria-hidden="true">»</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+
+            </div>
+
+            <div class="card">
+
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-outline table-vcenter text-nowrap card-table">
+                        <thead>
+                        <tr>
+                            <th class="text-center w-1"><i class="icon-people"></i></th>
+                            <th>故障ID</th>
+                            <th>级别</th>
+                            <th>标题</th>
+                            <th>故障时间</th>
+                            <th>报告完成度</th>
+                            <th class="text-center">操作</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in posts %}
+                            <tr>
+                                <td class="text-center">
+                                    <div class="avatar d-block" style="background-image: url(/static/demo/brand/n.jpg)">
+                                        <span class="avatar-status bg-green"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div><a href="/nocdoc.html?sn={{ i.serial_number }}"
+                                            target="_blank"> {{ i.serial_number }}</a></div>
+                                </td>
+                                <td>
+                                    <div style="align-items: left ">P{{ i.priority_id }}</div>
+                                </td>
+                                <td>
+                                    <div>{{ i.title|truncate(20) }}</div>
+                                </td>
+                                <td>
+                                    <div class="small text-muted" style="font-size: 10px;">开始：{{ i.start_time }}</div>
+                                    <div class="small text-muted" style="font-size: 10px;">修复：{{ i.fixed_time }}</div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="mx-auto chart-circle chart-circle-xs"
+                                         data-value="{{ finish_rate_list[i.serial_number]/100|int }}" data-thickness="4"
+                                         {% if  (finish_rate_list[i.serial_number]/100|int) > 0.98 %}data-color="green"{% else %}data-color="danger"{% endif %}>
+                                        <div class="chart-circle-value">{{ finish_rate_list[i.serial_number]|int }}%</div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="item-action dropdown">
+                                        <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i
+                                                class="fe fe-more-vertical"></i></a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a href="detail.html?sn={{ i.serial_number }}" class="dropdown-item"><i
+                                                    class="dropdown-icon fe fe-tag"></i> 编辑 </a>
+                                            {% if session.get("role")  == 'Administrator' %}
+                                                <a href="javascript:void(0)" class="dropdown-item"
+                                                   onClick="delcfm('{{ i.serial_number }}')"><i
+                                                        class="dropdown-icon fe fe-tag"></i>删除</a>
+                                                <div class="dropdown-divider"></div>
+                                                {% if finish_rate_list[i.serial_number]  > 98 %}
+                                                    <a href="javascript:void(0)" class="dropdown-item"><i
+                                                            class="dropdown-icon fe fe-message-square"></i> 发送邮件</a>
+                                                {% endif %}
+                                                {% if finish_rate_list[i.serial_number]  > 98 %}
+                                                    <a href="/inseartjira?sn={{ i.serial_number }}"
+                                                       class="dropdown-item"><i
+                                                            class="dropdown-icon fe fe-message-square"></i> 同步jira</a>
+                                                {% endif %}
+                                                {% if finish_rate_list[i.serial_number]  > 98 %}
+                                                    <a href="/inseartes?sn={{ i.serial_number }}" class="dropdown-item"><i
+                                                            class="dropdown-icon fe fe-message-square"></i> 同步es</a>
+                                                {% endif %}
+                                                {% if finish_rate_list[i.serial_number]  > 98 %}
+                                                    <a href="javascript:void(0)" class="dropdown-item"><i
+                                                            class="dropdown-icon fe fe-link"></i> 审核</a>{% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+
+                        <!-- 信息删除确认 -->
+                        <div class="modal fade" id="delcfmModel">
+                            <div class="modal-dialog">
+                                <div class="modal-content message_align">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title">提示信息</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>您确认要删除吗？</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="hidden" id="url"/>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                        <a onclick="delete_noc()" class="btn btn-success" data-dismiss="modal">确定</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+
+                        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        请确认
+                                    </div>
+                                    <div class="modal-body">
+                                        确认删除该记录吗？
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                        <a class="btn btn-danger btn-ok">删除记录</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+{% endblock %}

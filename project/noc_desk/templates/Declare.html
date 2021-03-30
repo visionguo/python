@@ -1,0 +1,535 @@
+{% extends "base.html" %}
+
+{% block js %}
+    <meta charset="utf-8">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block selfjs %}
+
+<script>
+function delcfm(del_id) {
+      //$('#url').val(url);//给会话中的隐藏属性URL赋值
+    $('#del_id').val(del_id);
+    //$('#delcfmModel').modal();
+}
+
+function urlSubmit(){
+   var url=$.trim($("#url").val());//获取会话中的隐藏属性URL
+   window.location.href=url;
+}
+</script>
+
+
+<script>
+    // 提交表单
+    function delete_info()
+    {
+        var id=$.trim($("#del_id").val());
+        if(!id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        $.ajax(
+                {
+                    url: "/edit_action",
+                    data:{"id":id, "act":"del"},
+                    type: "post",
+                    beforeSend:function()
+                    {
+                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        if(data.res == 'success')
+                        {
+                            alert('操作成功');
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+
+                            // document.location.href='world_system_notice.php'
+                             location.reload();
+                        }
+                        else
+                        {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 编辑表单
+    function get_edit_info(affected_id)
+    {
+        if(!affected_id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        console.log(affected_id)
+
+        $.ajax(
+                {
+                    url: "/edit_action",
+                    data:{"affected_id":affected_id, "act":"get"},
+                    type: "post",
+                    dataType:"json",
+                    beforeSend:function()
+                    {
+                        // $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        console.log(data)
+                        if(data)
+                        {
+
+                            // 解析json数据
+                            var data_obj = data;
+
+                            //var data_obj = eval("("+data+")");
+                            console.log(data_obj)
+
+                            // 赋值
+                            $("#affected_id").val(data_obj.id);
+                            $("#affected_dept").val(data_obj.affected_dept);
+                            $("#affected_team").val(data_obj.affected_team);
+                            console.log(affected_team);
+                            $("#affected_customer_type").val(data_obj.affected_customer_type);
+                            $("#affected_scope").val(data_obj.affected_scope);
+                            $("#affected_money").val(data_obj.affected_money);
+                            $("#detail").val(data_obj.detail);
+                            $("#act").val("edit");
+
+                            // 将input元素设置为readonly
+                            $('#user_id').attr("readonly","readonly")
+                           // location.reload();
+                        }
+                        else
+                        {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                          //  alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 提交表单
+    function check_form()
+    {
+        //var user_id = $.trim($('#user_id').val());
+        var act     = $.trim($('#act').val());
+        //var act = document.getElementById("act").value;
+        //var affected_id = $.trim($('#affected_id').val());
+        console.log(affected_id);
+
+        //if(!user_id)
+        //{
+        //    alert('用户ID不能为空！');
+        //    return false;
+        //}
+           var form_data = $('#form_data').serialize();
+           var s = form_data.replace(/\+/g," ");
+           console.log(s)
+           form_data = decodeURIComponent(s, true);
+           console.log(form_data)
+
+
+        // 异步提交数据到action/add_action.php页面
+        $.ajax(
+            {
+                    url: "/edit_action",
+                    data:{"form_data":form_data,"act":act},
+                    dataType: 'json',
+                    type: "POST",
+                    beforeSend:function()
+                    {
+                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+
+                        if( data.res == 'success' )
+                        {
+
+                            var msg = "添加";
+                            if(act == "edit") msg = "编辑";
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，" +msg+ "成功！</span>");
+                            // document.location.href='system_notice.php'
+                            alert(msg + "OK！");
+                            location.reload();
+                        }
+                        else
+                        {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        $('#acting_tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    $(function () { $('#addUserModal').on('hide.bs.modal', function () {
+        // 关闭时清空edit状态为add
+        $("#act").val("add");
+        location.reload();
+    })
+    });
+</script>
+
+
+<script>
+    // 提交表单
+    function delete_imp_info()
+    {
+     var id=$.trim($("#del_id").val());
+
+        if(!id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        $.ajax(
+                {
+                    url: "/imp_action",
+                    data:{"id":id, "imp_act":"del"},
+                    type: "post",
+                    beforeSend:function()
+                    {
+                        $("#imp_tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        if(data.res == 'success')
+                        {
+                            alert('操作成功');
+                            $("#imp_tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+
+                            // document.location.href='world_system_notice.php'
+                             location.reload();
+                        }
+                        else
+                        {
+                            $("#imp_tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 编辑表单
+    function get_imp_info(imp_id)
+    {
+        if(!imp_id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        console.log(imp_id)
+
+        $.ajax(
+                {
+                    url: "/imp_action",
+                    data:{"imp_id":imp_id, "imp_act":"get"},
+                    type: "post",
+                    dataType:"json",
+                    beforeSend:function()
+                    {
+                        // $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        console.log(data)
+                        if(data)
+                        {
+
+                            // 解析json数据
+                            var data_obj = data;
+
+                            //var data_obj = eval("("+data+")");
+                            console.log(data_obj)
+
+                            // 赋值
+                            $("#imp_id").val(data_obj.id);
+                            $("#imp_title").val(data_obj.title);
+                            console.log(affected_team);
+                            $("#imp_completion_time").val(data_obj.completion_time);
+                            $("#imp_jira_link").val(data_obj.jira_link);
+                            $("#imp_status").val(data_obj.status);
+                            $("#imp_act").val("edit");
+
+                            // 将input元素设置为readonly
+                            $('#user_id').attr("readonly","readonly")
+                           // location.reload();
+                        }
+                        else
+                        {
+                            $("#imp_tip").html("<span style='color:red'>失败，请重试</span>");
+                          //  alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 提交表单
+    function check_nocadd_form()
+    {
+        //var user_id = $.trim($('#user_id').val());
+        var imp_act     = $.trim($('#imp_act').val());
+        //var act = document.getElementById("act").value;
+        //var affected_id = $.trim($('#affected_id').val());
+        //console.log(affected_id);
+
+        //if(!user_id)
+        //{
+        //    alert('用户ID不能为空！');
+        //    return false;
+        //}
+           var imp_data = $('#imp_data').serialize();
+           var imp_re = imp_data.replace(/\+/g," ");
+           console.log(imp_re)
+           imp_data = decodeURIComponent(imp_re, true);
+           console.log(imp_data)
+           console.log(imp_act)
+
+
+
+        // 异步提交数据到action/add_action.php页面
+        $.ajax(
+            {
+
+                    url: "/addnocid",
+                    data:{"imp_data":imp_data,"imp_act":imp_act},
+                    dataType: 'json',
+                    type: "POST",
+                    beforeSend:function()
+                    {
+                        $("#imp_tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+
+                        if( data.res == 'success' )
+                        {
+
+                            var msg = "添加";
+                            if(imp_act == "edit") msg = "编辑";
+                            $("#imp_tip").html("<span style='color:blueviolet'>恭喜，" +msg+ "成功！</span>");
+                            // document.location.href='system_notice.php'
+                            alert(msg + "OK！");
+                            console.log(data.nocid)
+                            location.href="/nocdoc.html?sn="+data.nocid
+                            //location.reload();
+                        }
+                        else
+                        {
+                            $("#imp_tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        $('#acting_tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    $(function () { $('#impModal').on('hide.bs.modal', function () {
+        // 关闭时清空edit状态为add
+        $("#imp_act").val("add");
+        location.reload();
+    })
+    });
+</script>
+{% endblock %}
+
+{% block noc %}
+      <div class="page-main">
+
+        <div class="my-3 my-md-5" >
+          <div class="container" >
+            <div class="row" >
+
+                {% if forms != "1"  %}
+
+                     <div class="col-5"  >
+                <div class="card">
+
+                  <div class="card-status bg-red"></div>
+                  <div class="card-body text-center">
+
+                    <div class="card-category"></div>
+                    <div class="display-3 my-4">申报一个故障</div>
+                   <form method="post"  onsubmit="return confirm('Do you really want to submit the form?');">
+
+                    <ul class="list-unstyled leading-loose">
+                      <li>NOC会自动分配一个故障case ID</li>
+
+
+                      <li><i class="fe fe-check text-success mr-2" aria-hidden="true"></i> NOC值班电话:13426001208</li>
+
+
+                    </ul>
+                        <button class="btn btn-primary" data-toggle="modal"  data-target="#addnocid">申报故障</button>
+                  </form>
+
+                  </div>
+                </div>
+              </div>
+
+                {% else %}
+
+                      <div class="col-5"  >
+                <div class="card">
+                  <div class="card-status bg-red"></div>
+                  <div class="card-body text-center">
+                    <div class="card-category"></div>
+                    <div class="display-3 my-4">申报一个故障</div>
+                    <ul class="list-unstyled leading-loose">
+                      <li>case ID:{{ case_id }}</li>
+
+                      <li><i class="fe fe-check text-success mr-2" aria-hidden="true"></i> 故障标题:xxx故障了</li>
+
+
+                    </ul>
+                    <div class="text-center mt-6">
+                      <a href="?declare_form=2" class="btn btn-red btn-block">确认报障</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                {% endif %}
+
+
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+
+
+    <form method="post" action="" class="form-horizontal" role="form" id="imp_data" onsubmit="return check_nocadd_form()" style="margin: 20px;">
+    <div class="modal fade" id="addnocid" tabindex="-1" role="dialog" aria-labelledby="impModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="impModalLabel">
+
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+<form role="form">
+
+
+     <div class="form-group row">
+          <label for="imp_title" class="col-sm-4 col-form-label">故障ID</label>
+    <div class="col-sm-8">
+         <input type="text" class="form-control" id="nocid" name="nocid" value="{{  case_id }}" readonly>
+        </div>
+    <label for="imp_title" class="col-sm-4 col-form-label">故障标题</label>
+    <div class="col-sm-8">
+<input type="text" class="form-control" id="noctitle" name="noctitle" value="" placeholder="xxx业务线故障了">
+    </div>
+  </div>
+
+
+
+
+<div id="imp_act" style="display: none;"></div>
+
+</form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        确定申报
+                    </button><span id="imp_tip"> </span>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    </form>
+
+{% endblock  %}

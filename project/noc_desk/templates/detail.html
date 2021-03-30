@@ -1,0 +1,1166 @@
+{% extends "base.html" %}
+
+{% block js %}
+    <meta charset="utf-8">
+    <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
+{% block selfjs %}
+
+<script>
+function getval(sel) {
+    var parentId = sel.value;
+    //alert(parentId)
+    if(parentId == 'None')
+        return false;
+     $.ajax({
+                url : '/sub_reason',
+                type : 'POST',
+                data : {
+                    'parentId' : parentId,
+                },
+                dataType : 'json',
+                error:function()
+                {
+                    alert('Error loading data!');
+                },
+                success:function(msg)
+                {
+                    console.log(msg)
+                    $("#sub_noc_reason").empty();
+                    $.each(eval(msg), function(i, item) {
+                        console.log(item.id)
+                        $("<option value='" + item.id + "'>" + item.name + "</option>").appendTo($("#sub_noc_reason"));
+                    });
+                }
+            });
+
+
+}
+</script>
+
+<script>
+function getsb(sel) {
+    var sbid = sel.value;
+    //alert(parentId)
+    if(sbid == 'None')
+        return false;
+     $.ajax({
+                url : '/sub_business',
+                type : 'POST',
+                data : {
+                    'sbid' : sbid,
+                },
+                dataType : 'json',
+                error:function()
+                {
+                    alert('Error loading data!');
+                },
+                success:function(msg)
+                {
+                    console.log(msg)
+                    $("#responsible_team").empty();
+                    $.each(eval(msg), function(i, item) {
+                        console.log(item.id)
+                        $("<option value='" + item.id + "'>" + item.name + "</option>").appendTo($("#responsible_team"));
+                    });
+                }
+            });
+
+
+}
+</script>
+
+<script>
+function getsbgzyx(sel) {
+    var sbid = sel.value;
+    //alert(parentId)
+    if(sbid == 'None')
+        return false;
+     $.ajax({
+                url : '/sub_business',
+                type : 'POST',
+                data : {
+                    'sbid' : sbid,
+                },
+                dataType : 'json',
+                error:function()
+                {
+                    alert('Error loading data!');
+                },
+                success:function(msg)
+                {
+                    console.log(msg)
+                    $("#affected_team").empty();
+                    $.each(eval(msg), function(i, item) {
+                        console.log(item.id)
+                        $("<option value='" + item.id + "'>" + item.name + "</option>").appendTo($("#affected_team"));
+                    });
+                }
+            });
+
+
+}
+</script>
+
+<script>
+function getsbgjjh(sel) {
+    var sbid = sel.value;
+    //alert(parentId)
+    if(sbid == 'None')
+        return false;
+     $.ajax({
+                url : '/sub_business',
+                type : 'POST',
+                data : {
+                    'sbid' : sbid,
+                },
+                dataType : 'json',
+                error:function()
+                {
+                    alert('Error loading data!');
+                },
+                success:function(msg)
+                {
+                    console.log(msg)
+                    $("#imp_team").empty();
+                    $.each(eval(msg), function(i, item) {
+                        console.log(item.id)
+                        $("<option value='" + item.id + "'>" + item.name + "</option>").appendTo($("#imp_team"));
+                    });
+                }
+            });
+
+
+}
+</script>
+
+<script>
+function delcfm(del_id) {
+      //$('#url').val(url);//给会话中的隐藏属性URL赋值
+    $('#del_id').val(del_id);
+    //$('#delcfmModel').modal();
+}
+
+function urlSubmit(){
+   var url=$.trim($("#url").val());//获取会话中的隐藏属性URL
+   window.location.href=url;
+}
+</script>
+
+<script>
+$(function() {
+    //hang on event of form with id=myform
+    $("#guzhangxinxi").submit(function(e) {
+        if (confirm('确定提交更改吗？？？')) {
+            //prevent Default functionality
+            e.preventDefault();
+
+            //get the action-url of the form
+            var actionurl = e.currentTarget.action;
+            var dd = $("#guzhangxinxi").serialize();
+            console.log(dd);
+            //do your own request an handle the results
+            $.ajax({
+                url: "/edit_effect_info",
+                type: 'post',
+                //dataType: 'application/json',
+                data: $("#guzhangxinxi").serialize(),
+                    success:function(data)
+                    {
+                        if(data.res == 'success')
+                        {
+                            alert('操作成功');
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+
+                            // document.location.href='world_system_notice.php'
+                             location.reload();
+                        }
+                        else
+                        {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+            });
+
+        }
+    });
+
+});
+
+</script>
+
+<script>
+    // 提交表单
+    function delete_info()
+    {
+        var id=$.trim($("#del_id").val());
+        if(!id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        $.ajax(
+                {
+                    url: "/edit_action",
+                    data:{"id":id, "act":"del"},
+                    type: "post",
+                    beforeSend:function()
+                    {
+                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        if(data.res == 'success')
+                        {
+                            alert('操作成功');
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+
+                            // document.location.href='world_system_notice.php'
+                             location.reload();
+                        }
+                        else
+                        {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 编辑表单
+    function get_edit_info(affected_id)
+    {
+        if(!affected_id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        console.log(affected_id)
+
+        $.ajax(
+                {
+                    url: "/edit_action",
+                    data:{"affected_id":affected_id, "act":"get"},
+                    type: "post",
+                    dataType:"json",
+                    beforeSend:function()
+                    {
+                        // $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        console.log(data)
+                        if(data)
+                        {
+
+                            // 解析json数据
+                            var data_obj = data;
+
+                            //var data_obj = eval("("+data+")");
+                            console.log(data_obj)
+
+                            // 赋值
+                            $("#affected_id").val(data_obj.id);
+                            $("#affected_dept").val(data_obj.affected_dept);
+                            $("#affected_team").val(data_obj.affected_team);
+                            console.log(affected_team);
+                            $("#affected_customer_type").val(data_obj.affected_customer_type);
+                            $("#affected_scope").val(data_obj.affected_scope);
+                            $("#affected_money").val(data_obj.affected_money);
+                            $("#detail").val(data_obj.detail);
+                            $("#act").val("edit");
+
+                            // 将input元素设置为readonly
+                            $('#user_id').attr("readonly","readonly")
+                           // location.reload();
+                        }
+                        else
+                        {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                          //  alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 提交表单
+    function check_form()
+    {
+        //var user_id = $.trim($('#user_id').val());
+        var act     = $.trim($('#act').val());
+        //var act = document.getElementById("act").value;
+        //var affected_id = $.trim($('#affected_id').val());
+        console.log(affected_id);
+
+        //if(!user_id)
+        //{
+        //    alert('用户ID不能为空！');
+        //    return false;
+        //}
+           var form_data = $('#form_data').serialize();
+           var s = form_data.replace(/\+/g," ");
+           console.log(s)
+           form_data = decodeURIComponent(s, true);
+           console.log(form_data)
+
+
+        // 异步提交数据到action/add_action.php页面
+        $.ajax(
+            {
+                    url: "/edit_action",
+                    data:{"form_data":form_data,"act":act},
+                    dataType: 'json',
+                    type: "POST",
+                    beforeSend:function()
+                    {
+                        $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+
+                        if( data.res == 'success' )
+                        {
+
+                            var msg = "添加";
+                            if(act == "edit") msg = "编辑";
+                            $("#tip").html("<span style='color:blueviolet'>恭喜，" +msg+ "成功！</span>");
+                            // document.location.href='system_notice.php'
+                            alert(msg + "OK！");
+                            location.reload();
+                        }
+                        else
+                        {
+                            $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        $('#acting_tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    $(function () { $('#addUserModal').on('hide.bs.modal', function () {
+        // 关闭时清空edit状态为add
+        $("#act").val("add");
+        location.reload();
+    })
+    });
+</script>
+
+
+<script>
+    // 提交表单
+    function delete_imp_info()
+    {
+     var id=$.trim($("#del_id").val());
+
+        if(!id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        $.ajax(
+                {
+                    url: "/imp_action",
+                    data:{"id":id, "imp_act":"del"},
+                    type: "post",
+                    beforeSend:function()
+                    {
+                        $("#imp_tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        if(data.res == 'success')
+                        {
+                            alert('操作成功');
+                            $("#imp_tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+
+                            // document.location.href='world_system_notice.php'
+                             location.reload();
+                        }
+                        else
+                        {
+                            $("#imp_tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 编辑表单
+    function get_imp_info(imp_id)
+    {
+        if(!imp_id)
+        {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        console.log(imp_id)
+
+        $.ajax(
+                {
+                    url: "/imp_action",
+                    data:{"imp_id":imp_id, "imp_act":"get"},
+                    type: "post",
+                    dataType:"json",
+                    beforeSend:function()
+                    {
+                        // $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+                        console.log(data)
+                        if(data)
+                        {
+
+                            // 解析json数据
+                            var data_obj = data;
+
+                            //var data_obj = eval("("+data+")");
+                            console.log(data_obj)
+
+                            // 赋值
+                            $("#imp_id").val(data_obj.id);
+                            $("#imp_title").val(data_obj.title);
+                            $("#imp_username").val(data_obj.assignee)
+                            $("#imp_dept").val(data_obj.improve_dept)
+                            $("#imp_team").val(data_obj.improve_team)
+                            console.log(imp_username);
+                            $("#imp_completion_time").val(data_obj.completion_time);
+                            $("#imp_jira_link").val(data_obj.jira_link);
+                            $("#imp_status").val(data_obj.status);
+                            $("#imp_act").val("edit");
+
+                            // 将input元素设置为readonly
+                            $('#user_id').attr("readonly","readonly")
+                           // location.reload();
+                        }
+                        else
+                        {
+                            $("#imp_tip").html("<span style='color:red'>失败，请重试</span>");
+                          //  alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        // $('#tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    // 提交表单
+    function check_ipm_form()
+    {
+        //var user_id = $.trim($('#user_id').val());
+        var imp_act     = $.trim($('#imp_act').val());
+        var imp_title     = $.trim($('#imp_title').val());
+        var imp_username = $.trim($('#imp_username').val())
+
+        //var act = document.getElementById("act").value;
+        //var affected_id = $.trim($('#affected_id').val());
+        //console.log(affected_id);
+
+        if(!imp_title)
+        {
+            alert('改进任务不能为空！');
+            return false;
+        }
+        if(!imp_username)
+        {
+            alert('负责人不能为空！');
+            return false;
+        }
+            console.log(imp_title);
+           var imp_data = $('#imp_data').serialize();
+            console.log(imp_data)
+
+           var imp_re = imp_data.replace(/\+/g," ");
+           //console.log(imp_re)
+           imp_data = decodeURIComponent(imp_re, true);
+           //console.log(imp_data)
+
+
+
+
+        // 异步提交数据到action/add_action.php页面
+        $.ajax(
+            {
+                    url: "/imp_action",
+                    data:{"imp_data":imp_data,"imp_act":imp_act},
+                    dataType: 'json',
+                    type: "POST",
+                    beforeSend:function()
+                    {
+                        $("#imp_tip").html("<span style='color:blue'>正在处理...</span>");
+                        return true;
+                    },
+                    success:function(data)
+                    {
+
+                        if( data.res == 'success' )
+                        {
+
+                            var msg = "添加";
+                            if(imp_act == "edit") msg = "编辑";
+                            $("#imp_tip").html("<span style='color:blueviolet'>恭喜，" +msg+ "成功！</span>");
+                            // document.location.href='system_notice.php'
+                            alert(msg + "OK！");
+                            location.reload();
+                        }
+                        else
+                        {
+                            $("#imp_tip").html("<span style='color:red'>失败，请重试</span>");
+                            alert('操作失败');
+                        }
+                    },
+                    error:function()
+                    {
+                        alert('请求出错');
+                    },
+                    complete:function()
+                    {
+                        $('#acting_tips').hide();
+                    }
+                });
+
+        return false;
+    }
+
+    $(function () { $('#impModal').on('hide.bs.modal', function () {
+        // 关闭时清空edit状态为add
+        $("#imp_act").val("add");
+        location.reload();
+    })
+    });
+</script>
+{% endblock %}
+
+{% block noc %}
+ <div class="container">
+
+ <div class="row">
+  <div class="col-lg-3 order-lg-1 mb-4">
+                <a href="/noclist.html" class="btn btn-block btn-primary mb-6">
+                  << 返回故障列表页
+                </a>
+                <!-- Getting started -->
+                <div class="list-group list-group-transparent mb-0">
+                  <a href="/nocdoc.html?sn={{ case_sn }}" class="list-group-item list-group-item-action "><span class="icon mr-3"><i class="fe fe-flag"></i></span>查看报告详情</a>
+                </div>
+                <!-- Components -->
+                <div class="list-group list-group-transparent mb-0">
+
+                  <a href="#" class="list-group-item list-group-item-action active"><span class="icon mr-3"><i class="fe fe-feather"></i></span>编辑报告</a>
+                </div>
+
+              </div>
+ <div class="col-lg-9">
+
+
+            <div class="col-lg-12">
+              <form id="guzhangxinxi" method="post" action="" class="card"">
+                <div class="card-body">
+                  <h3 class="card-title">故障基础信息</h3>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障编号</label>
+                        <input type="text" readonly="readonly" class="form-control" placeholder="故障编号" name="serial_number" value="{{ case_sn }}">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障标题</label>
+                        <input type="text" class="form-control" placeholder="故障标题" name="title" value="{{ noc_info.title }}">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-label">责任业务线</label>
+                        <select name=responsible_dept id="responsible_dept" onchange="getsb(this);" class="form-control custom-select">
+                        <option value="None">None</option>
+                            {% for bu in b %}
+                          <option value="{{ bu['id'] }}" {% if bu['id'] == noc_info.responsible_dept %}selected="selected"{% endif %}>{{ bu['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                      <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-label">子业务线</label>
+                        <select name=responsible_team id="responsible_team" class="form-control custom-select">
+                        <option value="None">None</option>
+                            {% for sbu in sb %}
+                          <option value="{{ sbu['id'] }}" {% if sbu['id'] == noc_info.responsible_team %}selected="selected"{% endif %}>{{ sbu['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  <div class="col-md-12">
+                      <div class="form-group">
+                  <label class="form-label">故障原因</label>
+                      </div>
+                  </div>
+                    <div class="col-md-6">
+
+                      <div class="form-group">
+
+                        <label >故障原因一级分类</label>
+                        <select name=noc_reason id="noc_reason" onchange="getval(this);" class="form-control custom-select">
+                        <option value="None">None</option>
+                            {% for reason in reasons_info %}
+                          <option value="{{ reason['id'] }}" {% if reason['id'] == noc_info.noc_reason %}selected="selected"{% endif %}>{{ reason['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-label">故障原因二级分类</label>
+                        <select name=direct_reason_id id="sub_noc_reason" class="form-control custom-select">
+                        <option value="None">None</option>
+                            {% for s_reason in sub_reasons_info %}
+                          <option value="{{ s_reason['id'] }}" {% if s_reason['id'] == noc_info.direct_reason_id %}selected="selected"{% endif %}>{{ s_reason['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-12 ">
+                      <div class="form-group">
+                        <label class="form-label">故障发生时间</label>
+                        <input type="datetime-local" class="form-control" name="start_time" value="{{ start_time }}">
+                      </div>
+                    </div>
+                    <div class="col-md-12 ">
+                      <div class="form-group">
+                        <label class="form-label">故障发现时间</label>
+                        <input type="datetime-local" class="form-control" name="found_time" value="{{ found_time }}">
+                      </div>
+                    </div>
+
+                      <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障恢复时间</label>
+                        <input type="datetime-local" class="form-control" name="fixed_time" value="{{ fixed_time }}">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障级别</label>
+                        <select name=priority_id class="form-control custom-select">
+                            {% for p in priority_info %}
+                          <option value="{{ p.id }}" {% if p.id == noc_info.priority_id %}selected="selected"{% endif %}>{{ p.name }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+
+                                      <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障概述</label>
+                        <textarea rows="3" class="form-control" placeholder="故障概述" name="desc">{{ noc_info.desc }}</textarea>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障详细处理过程</label>
+                        <textarea rows="5" class="form-control" placeholder="故障详细处理过程" name="detail">{{ noc_info.detail }}</textarea>
+                      </div>
+                    </div>
+
+                                      <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障分析</label>
+                        <textarea rows="5" class="form-control" placeholder="故障分析" name="analysis">{{ noc_info.analysis }}</textarea>
+                      </div>
+                    </div>
+<!--
+                      <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">故障状态</label>
+                        <input type="text" class="form-control" placeholder="故障状态" name="status" value="{{ noc_info.status }}">
+                      </div>
+                    </div>
+-->
+                  </div>
+                </div>
+                <div class="card-footer text-right">
+                    <div class="alert alert-danger" role="alert" style=" display:inline;float:left">
+  注意：修改完成请点击提交按钮！否则会丢失更改！
+ </div>
+                  <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+              </form>
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">故障影响</h3>
+                          <div class="ml-auto">
+                              <button class="btn btn-primary" data-toggle="modal"  data-target="#addUserModal">新增</button>
+                          </div>
+                  </div>
+                  <div class="table-responsive" style="font-size: small">
+
+
+
+
+
+                    <table class="table card-table table-vcenter">
+                      <thead class="text-nowrap">
+                        <tr>
+                          <th>受影响业务线</th>
+                          <th>受影响用户属性</th>
+                          <th>影响用户规模</th>
+                          <th>影响资金规模</th>
+                          <th>详细说明</th>
+                          <th>操作</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for affected in affected_info %}
+                        <tr>
+                          <td><a href="invoice.html" class="text-inherit">
+                              {% for bu in b if bu['id'] == affected.affected_dept %} {{ bu['name'] }}{% endfor %}
+
+                           {% for isb in sb if isb['id'] == affected.affected_team %} {{ isb['name'] }} {% endfor %}
+                          </a></td>
+                          <td>
+                            {% if affected.affected_customer_type == 1 %}外部{% else %}内部{% endif %}
+                          </td>
+                          <td>
+                            {{ affected.affected_scope }}
+                          </td>
+                          <td>
+                            {{ affected.affected_money }}
+                          </td>
+
+                          <td>
+                              {{ affected.detail }}
+                          </td>
+                          <td class="text-nowrap">
+            <button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_edit_info({{ affected.id }})" data-target="#addUserModal">编辑</button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" onclick="return delcfm({{ affected.id }})" data-target="#delaffectedeModel">删除</button>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+                  <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">改进计划</h3>
+                          <div class="ml-auto">
+                              <button class="btn btn-primary" data-toggle="modal"  data-target="#impModal">新增</button>
+                          </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table card-table table-vcenter">
+                      <thead class="text-nowrap">
+                        <tr>
+                          <th>改进项标题</th>
+                            <th>负责团队</th>
+                            <th>负责人</th>
+                          <th>计划完成日期</th>
+                          <th>jira链接</th>
+                          <th>状态</th>
+                          <th>操作</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for imp in imp_info %}
+                        <tr>
+                          <td>
+                            {{ imp.title }}
+                          </td>
+                            <td>
+                           {% for bu in b if bu['id'] == imp.improve_dept %} {{ bu['name'] }}{% endfor %}
+
+                           {% for isb in sb if isb['id'] == imp.improve_team %} {{ isb['name'] }} {% endfor %}
+                          </td>
+                            <td>
+                            {{ imp.assignee }}
+                          </td>
+
+                          <td>
+                            {{ imp.completion_time }}
+                          </td>
+                          <td>
+                            {{ imp.jira_link }}
+                          </td>
+
+                          <td>
+                              {{ imp.status }}
+                          </td>
+                          <td class="text-nowrap">
+            <button type="button" class="btn btn-info" data-toggle="modal" onclick="return get_imp_info({{ imp.id }})" data-target="#impModal">编辑</button>
+            <button type="button" class="btn btn-danger" data-toggle="modal" onclick="return delcfm({{ imp.id }})" data-target="#delimpModel">删除</button>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+ </div>
+ </div>
+ </div>
+
+
+
+
+        <!-- 模态框示例（Modal） -->
+    <form method="post" action="" class="form-horizontal" role="form" id="form_data" onsubmit="return check_form()" style="margin: 20px;">
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        故障影响
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+<form role="form">
+  <div class="form-group row" style="display:none;">
+    <label for="affected_id" class="col-sm-4 col-form-label">ID</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="affected_id" name="affected_id" value="" placeholder="不用填" readonly>
+    </div>
+  </div>
+
+    <div class="form-group row">
+    <label for="case_sn" class="col-sm-4 col-form-label">故障编号</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="case_sn" name="case_sn" value="{{ case_sn }}" readonly>
+    </div>
+  </div>
+
+
+     <div class="form-group row">
+    <label for="affected_dept" class="col-sm-4 col-form-label">受影响业务线</label>
+    <div class="col-sm-8">
+      <select name="affected_dept" id="affected_dept" onchange="getsbgzyx(this);" class="form-control custom-select">
+          {% for bu in b %}
+        <option value="{{ bu['id'] }}" {% if affected_dept == "affected_dept" %} selected{% endif %}>{{ bu['name'] }}</option>
+          {% endfor %}
+      </select>
+    </div>
+  </div>
+
+
+     <div class="form-group row">
+    <label for="affected_team" class="col-sm-4 col-form-label">受影响子业务线</label>
+    <div class="col-sm-8">
+      <select name="affected_team" id="affected_team" class="form-control custom-select">
+          {% for sbu in sb %}
+        <option value="{{ sbu['id'] }}" {% if affected_team == "affected_team" %} selected{% endif %}>{{ sbu['name'] }}</option>
+          {% endfor %}
+      </select>
+    </div>
+  </div>
+
+     <div class="form-group row">
+    <label for="affected_customer_type" class="col-sm-4 col-form-label">受影响用户属性</label>
+    <div class="col-sm-8">
+     <select name="affected_customer_type" id="affected_customer_type" class="form-control custom-select">
+  <option value=2>内部</option>
+  <option value=1>外部</option>
+     </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="affected_scope" class="col-sm-4 col-form-label">影响用户规模</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="affected_scope" name="affected_scope" value="" placeholder="影响用户规模">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="affected_money" class="col-sm-4 col-form-label">影响资金规模</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="affected_money" name="affected_money" value="" placeholder="影响资金规模">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="detail" class="col-sm-4 col-form-label">详细说明</label>
+    <div class="col-sm-8">
+      <textarea class="form-control" id="detail" name="detail" value="" placeholder="详细说明"></textarea>
+    </div>
+  </div>
+
+<div id="act" style="display: none;"></div>
+
+</form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        提交
+                    </button><span id="tip"> </span>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    </form>
+
+
+
+
+<!-- 改进计划弹窗 -->
+    <form method="post" action="" class="form-horizontal" role="form" id="imp_data" onsubmit="return check_ipm_form()" style="margin: 20px;">
+    <div class="modal fade" id="impModal" tabindex="-1" role="dialog" aria-labelledby="impModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    </button>
+                    <h4 class="modal-title" id="impModalLabel">
+                        改进计划
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+<form role="form">
+  <div class="form-group row" style="display: none;">
+    <label for="imp_id" class="col-sm-4 col-form-label">ID</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="imp_id" name="imp_id" value="" placeholder="不用填" readonly>
+    </div>
+  </div>
+
+    <div class="form-group row" style="display: none;">
+    <label for="case_sn" class="col-sm-4 col-form-label">故障编号</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="case_sn" name="case_sn" value="{{ case_sn }}" readonly>
+    </div>
+  </div>
+
+     <div class="form-group row">
+    <label for="imp_title" class="col-sm-4 col-form-label">改进项任务</label>
+    <div class="col-sm-8">
+<input type="text" class="form-control" id="imp_title" name="imp_title" value="" placeholder="改进项任务">
+    </div>
+  </div>
+
+       <div class="form-group row">
+    <label for="imp_dept" class="col-sm-4 col-form-label">归属一级业务线</label>
+    <div class="col-sm-8">
+      <select name="imp_dept" id="imp_dept" onchange="getsbgjjh(this);" class="form-control custom-select">
+          {% for bu in b %}
+        <option value="{{ bu['id'] }}" {% if affected_dept == "affected_dept" %} selected{% endif %}>{{ bu['name'] }}</option>
+          {% endfor %}
+      </select>
+    </div>
+  </div>
+
+
+     <div class="form-group row">
+    <label for="imp_team" class="col-sm-4 col-form-label">归属二级业务线</label>
+    <div class="col-sm-8">
+      <select name="imp_team" id="imp_team" class="form-control custom-select">
+          {% for sbu in sb %}
+        <option value="{{ sbu['id'] }}" {% if affected_team == "affected_team" %} selected{% endif %}>{{ sbu['name'] }}</option>
+          {% endfor %}
+      </select>
+    </div>
+  </div>
+
+     <div class="form-group row">
+    <label for="imp_username" class="col-sm-4 col-form-label">负责人</label>
+    <div class="col-sm-8">
+<input type="text" class="form-control" id="imp_username" name="imp_username" value="" placeholder="负责人">
+    </div>
+  </div>
+
+     <div class="form-group row">
+    <label for="imp_completion_time" class="col-sm-4 col-form-label">计划完成时间</label>
+    <div class="col-sm-8">
+<input type="date" class="form-control" id="imp_completion_time" name="imp_completion_time" value="" placeholder="计划完成时间">
+    </div>
+  </div>
+
+  <div class="form-group row" style="display: none;">
+    <label for="imp_jira_link" class="col-sm-4 col-form-label">jira链接</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="imp_jira_link" name="imp_jira_link" value="" placeholder="jira链接">
+    </div>
+  </div>
+
+  <div class="form-group row" style="display: none;">
+    <label for="imp_status" class="col-sm-4 col-form-label">状态</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="imp_status" name="imp_status" value="" placeholder="状态">
+    </div>
+  </div>
+
+
+<div id="imp_act" style="display: none;"></div>
+
+</form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        提交
+                    </button><span id="imp_tip"> </span>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    </form>
+
+
+
+
+<!-- 信息删除确认 -->
+<div class="modal fade" id="delimpModel">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+      	 <input type="hidden" id="del_id"/>
+      	 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      	 <a  onclick="delete_imp_info()" class="btn btn-success" data-dismiss="modal">确定</a>
+          <span id="imp_tip"> </span>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- 信息删除确认 -->
+<div class="modal fade" id="delaffectedeModel">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+      	 <input type="hidden" id="del_id"/>
+      	 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      	 <a  onclick="delete_info()" class="btn btn-success" data-dismiss="modal">确定</a>
+          <span id="tip"> </span>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+{% endblock %}

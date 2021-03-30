@@ -1,0 +1,30 @@
+stages:
+  - prepare
+  - build
+  - deploy
+
+prepare:
+  stage: prepare
+  script:
+    - med prepare -n prepare
+
+build:
+  stage: build
+  only:
+    - online
+  script:
+    - med build -n build
+
+deploy-test:
+  stage: deploy
+  only:
+    - online
+  script:
+    - med deploy -n deploy
+
+push-online:   
+    stage: push
+    only:
+       - tags
+    script:
+       - med push -n deploy
