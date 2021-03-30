@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>用户信息</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">主页</a>
+                </li>
+                <li>
+                    <a>用户管理</a>
+                </li>
+                <li>
+                    <strong>用户信息</strong>
+
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            {% for user in user_ret %}
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>基本信息</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <samll>姓名 ： {{ user.name }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>邮箱： {{ user.email }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    {% if user.phone == '' %}
+                                        <samll>联系号码： 无</samll>
+                                    {% else %}
+                                        <samll>联系号码： {{ user.phone }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if user.department == '' or user.department == None %}
+                                        <samll>部门： 无</samll>
+                                    {% else %}
+                                        <samll>部门： {{ user.department }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if user.group == '' or user.group == None %}
+                                    <samll>小组： 无</samll>
+                                    {% else %}
+                                    <samll>小组： {{ user.group }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if user.date_created == '' or user.date_created == None %}
+                                    <samll>加入时间： 无</samll>
+                                    {% else %}
+                                    <samll>加入时间： {{ user.date_created }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if user.last_login == '' or user.last_login == None %}
+                                    <samll>最近登录时间： 无</samll>
+                                    {% else %}
+                                    <samll>最近登录时间： {{ user.last_login }}</samll>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

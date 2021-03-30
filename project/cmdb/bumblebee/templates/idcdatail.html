@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>机房信息</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">主页</a>
+                </li>
+                <li>
+                    <a>机房管理</a>
+                </li>
+                <li>
+                    <strong>机房信息</strong>
+
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            {% for idc in idc_ret %}
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>基本信息</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <samll>机房名 ： {{ idc.name }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>带宽： {{ idc.bandwidth }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    {% if idc.contactor == '' %}
+                                        <samll>联系人： 无</samll>
+                                    {% else %}
+                                        <samll>联系人： {{ idc.contactor }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if idc.phone == '' or idc.phone == None %}
+                                        <samll>联系号码： 无</samll>
+                                    {% else %}
+                                        <samll>联系号码： {{ idc.phone }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if idc.address == '' or idc.address == None %}
+                                    <samll>机房地址： 无</samll>
+                                    {% else %}
+                                    <samll>机房地址： {{ idc.address }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if idc.created_by == '' or idc.created_by == None %}
+                                    <samll>创建人： 无</samll>
+                                    {% else %}
+                                    <samll>创建人： {{ idc.created_by }}</samll>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

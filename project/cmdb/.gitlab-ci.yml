@@ -1,0 +1,11 @@
+stages:
+  - rsync
+
+rsync-release:
+  stage: rsync
+  only:
+      - tags
+  script:
+    - mkdir target
+    - tar --exclude=target -czvf target/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.gz .
+    - rsync -avzp target/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.gz earthworm.xxx-int.com::sre/$CI_PROJECT_NAME/

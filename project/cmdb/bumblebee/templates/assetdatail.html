@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>资产详细信息</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">主页</a>
+                </li>
+                <li>
+                    <a>资产</a>
+                </li>
+                <li>
+                    <strong>资产详细信息</strong>
+
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            {% for i in asset_ret %}
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>基本信息</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <samll>主机名： {{ i.hostname }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>IP： {{ i.ip }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.cip == '' %}
+                                        <samll>管理IP： 无</samll>
+                                    {% else %}
+                                        <samll>管理IP： {{ i.cip }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.vip == '' or i.vip == None %}
+                                        <samll>虚拟IP： 无</samll>
+                                    {% else %}
+                                        <samll>虚拟IP： {{ i.vip }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.mac == '' or i.mac == None %}
+                                    <samll>mac： 无</samll>
+                                    {% else %}
+                                    <samll>mac： {{ i.mac }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.os == '' or i.os == None %}
+                                    <samll>系统： 无</samll>
+                                    {% else %}
+                                    <samll>系统： {{ i.os }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.hosttype == '' or i.hosttype == None %}
+                                    <samll>主机类型： 无</samll>
+                                    {% else %}
+                                    <samll>主机类型： {{ i.get_hosttype_display }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.env == '' or i.env == None %}
+                                    <samll>服务器环境： 无</samll>
+                                    {% else %}
+                                    <samll>服务器环境： {{ i.get_env_display }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.statu == '' or i.statu == None %}
+                                    <samll>服务器状态： 无</samll>
+                                    {% else %}
+                                    <samll>服务器状态： {{ i.get_statu_display }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.exist == '' or i.exist == None %}
+                                    <samll>宿主机： 无</samll>
+                                    {% else %}
+                                    <samll>宿主机： {{ i.exist }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.platform == '' or i.platform == None %}
+                                    <samll>系统类别： 无</samll>
+                                    {% else %}
+                                    <samll>系统类别： {{ i.platform }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.manufacture == '' or i.manufacture == None %}
+                                    <samll>服务器厂商： 无</samll>
+                                    {% else %}
+                                    <samll>服务器厂商： {{ i.manufacture }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.server_model == '' or i.server_model == None %}
+                                    <samll>服务器型号： 无</samll>
+                                    {% else %}
+                                    <samll>服务器型号： {{ i.server_model }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.sn == '' or i.sn == None %}
+                                    <samll>序列号： 无</samll>
+                                    {% else %}
+                                    <samll>序列号： {{ i.sn }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.out_use == '' or i.out_use == None %}
+                                    <samll>过保日期： 无</samll>
+                                    {% else %}
+                                    <samll>过保日期： {{ i.out_use }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.idc == '' or i.idc == None %}
+                                    <samll>机房： 无</samll>
+                                    {% else %}
+                                    <samll>机房： {{ i.idc }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.cabinet_no == '' or i.cabinet_no == None %}
+                                    <samll>所在机柜： 无</samll>
+                                    {% else %}
+                                    <samll>所在机柜： {{ i.cabinet_no }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.cabinet_pos == '' or i.cabinet_pos == None %}
+                                    <samll>机柜位置： 无</samll>
+                                    {% else %}
+                                    <samll>机柜位置： {{ i.cabinet_pos }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.created_by == '' or i.created_by == None %}
+                                    <samll>创建人： 无</samll>
+                                    {% else %}
+                                    <samll>创建人： {{ i.created_by }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.date_created == '' or i.date_created == None %}
+                                    <samll>创建日期： 无</samll>
+                                    {% else %}
+                                    <samll>创建日期： {{ i.date_created }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.last_op == '' or i.last_op == None %}
+                                    <samll>最后操作人： 无</samll>
+                                    {% else %}
+                                    <samll>最后操作人： {{ i.last_op }}</samll>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>业务相关</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <samll>主业务： {{ i.business }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>子业务： {{ i.sub_business }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>用途： {{ i.purpose }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>备注： {{ i.comment }}</samll>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>硬件信息</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <samll>内存： {{ i.mem }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>CPU： {{ i.cpu }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.disk == '' or i.disk == None %}
+                                        <samll>磁盘： 无</samll>
+                                    {% else %}
+                                        <samll>磁盘： {{ i.disk }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.nic == '' or i.nic == None %}
+                                        <samll>网卡： 无</samll>
+                                    {% else %}
+                                        <samll>网卡： {{ i.nic }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.raidcard == '' or i.raidcard == None %}
+                                        <samll>Raid卡： 无</samll>
+                                    {% else %}
+                                        <samll>Raid卡： {{ i.raidcard }}</samll>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if i.raidtype == '' or i.raidtype == None %}
+                                        <samll>Raid类型： 无</samll>
+                                    {% else %}
+                                        <samll>Raid类型： {{ i.raidtype }}</samll>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

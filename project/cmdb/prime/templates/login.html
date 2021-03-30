@@ -1,0 +1,72 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/login_v2.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Mar 2016 12:30:00 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>瓜子SRE平台- 登录</title>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <link href="{% static 'login.min.css' %}" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+
+</head>
+
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1>SRE平台</h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4>欢迎使用 <strong>瓜子SRE平台</strong></h4>
+                    <ul class="m-b">
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 功能一</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 功能二</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 功能三</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 功能四</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 功能五</li>
+                    </ul>
+                    <!--<strong>还没有账号？ <a href="{% url 'prime:register' %}">立即注册&raquo;</a></strong>-->
+                </div>
+            </div>
+            <div class="col-sm-5">
+{#                <form method="post" action="{% url 'Index' %}">{% csrf_token %}#}
+                <form method="post">{% csrf_token %}
+                    <h4 class="no-margins">登录：</h4>
+                    <p class="m-t-md">登录到瓜子SRE平台</p>
+                    <input type="text" name="username" class="form-control uname" placeholder="用户名" />
+                    <input type="password" name="password" class="form-control pword m-b" placeholder="密码" />
+                    <!--<a href="#">忘记密码了？</a>-->
+                    <button class="btn btn-success btn-block">登录</button>
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                &copy; 2018 All Rights Reserved.
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

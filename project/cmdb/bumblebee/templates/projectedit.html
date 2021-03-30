@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>修改项目</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">主页</a>
+                </li>
+                <li>
+                    <a>项目管理</a>
+                </li>
+                <li>
+                    <strong>修改项目</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>修改项目</h5>
+                </div>
+                {% for i in project_ret %}
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="post">{% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">项目名：</label>
+                            <div class="col-sm-3">
+                                <input id="name" name="name" disabled="" value="{{ i.name }}" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">使用端口：</label>
+                            <div class="col-sm-3">
+                                <input type="text" disabled="" value="{{ i.port }}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">开发语言：</label>
+                            <div class="col-sm-3">
+                                <input type="text" disabled="" value="{{ i.language }}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">git地址：</label>
+                            <div class="col-sm-3">
+                                <input type="text" disabled="" value="{{ i.git }}" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否监控：</label>
+                            <div class="col-sm-3">
+                                <select class="form-control m-b" name="choice">
+                                    {% for c in  monitor_choices %}
+                                        {% if c.1 in i.get_monitorchoice_display %}
+                                        <option value="{{ c.0 }}" selected="selected">{{ i.get_monitorchoice_display }}</option>
+                                        {% else %}
+                                        <option value="{{ c.0 }}">{{ c.1 }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">监控环境：</label>
+                            <div class="col-sm-3">
+                                <select class="form-control m-b" name="env">
+                                    {% for env in  monitor_envs %}
+                                        {% if env.1 in i.get_monitorenv_display %}
+                                        <option value="{{ env.0 }}" selected="selected">{{ i.get_monitorenv_display }}</option>
+                                        {% else %}
+                                        <option value="{{ env.0 }}">{{ env.1 }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">监控uri：</label>
+                            <div class="col-sm-3">
+                                {% if i.monitor_url is None %}
+                                <input name="uri" type="text" placeholder="例如:metrics" value="" class="form-control">
+                                {% else %}
+                                <input name="uri" type="text" placeholder="例如:metrics" value="{{ i.monitor_url }}" class="form-control">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button class="btn btn-primary" onclick="location.href='{% url 'bumblebee:projectlist' %}'" type="button">取消</button>
+                                <button class="btn btn-primary" type="submit">确认</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block foot_css_js %}
+    <script>
+        var ret = {{ res|safe }};
+        if (ret.code === 1){
+            alert(ret.errmsg);
+        };
+
+    </script>
+{% endblock %}
+

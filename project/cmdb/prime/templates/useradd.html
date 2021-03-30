@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>添加用户</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">主页</a>
+                </li>
+                <li>
+                    <a>用户管理</a>
+                </li>
+                <li>
+                    <strong>添加用户</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加用户</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm" method="POST">{% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户名：</label>
+                            <div class="col-sm-3">
+
+                                <input id="username" name="username" value="" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">密码：</label>
+                            <div class="col-sm-3">
+
+                                <input id="password" name="password" value="" class="form-control" type="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">邮 箱：</label>
+                            <div class="col-sm-3">
+
+                                <input id="email" name="email" value="" class="form-control" type="email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">姓名：</label>
+                            <div class="col-sm-3">
+
+                                <input id="name" name="name" value="" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">权限：</label>
+                            <div class="col-sm-3">
+                                <select class="form-control m-b-xl" name="permission" multiple="multiple">
+                                    {% for permission in permissions %}
+                                        {% if 'content type' in permission.name or 'log entry' in permission.name or 'session' in  permission.name %}
+
+                                        {% else %}
+                                    <option value="{{ permission.id }}">{{ permission.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button class="btn btn-primary" onclick="location.href='{% url 'bumblebee:niclist' %}'" type="button">取消
+                                </button>
+                                <button class="btn btn-primary" type="submit">确认
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

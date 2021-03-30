@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>项目信息</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">主页</a>
+                </li>
+                <li>
+                    <a>项目管理</a>
+                </li>
+                <li>
+                    <strong>项目信息</strong>
+
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            {% for i in project_ret %}
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>基本信息</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <samll>项目名： {{ i.name }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>开发语言： {{ i.language }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>使用端口： {{ i.port }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>git地址： {{ i.git }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>git组： {{ i.git_group }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>监控端口： {{ i.exporter_port }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>监控URL： {{ i.monitor_url }}</samll>
+                                </div>
+                                <div class="col-md-4">
+                                    <samll>所使用数据库： {{ i.db_used }}</samll>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>预上线主机列表</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <samll>pre主机： {{ i.prehost }}</samll>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>灰度主机列表</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <samll>gray主机： {{ i.grayhost }}</samll>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>线上主机列表</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal m-t">
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <samll>online主机： {{ i.onlinehost }}</samll>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

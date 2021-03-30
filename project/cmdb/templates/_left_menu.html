@@ -1,0 +1,249 @@
+{% load static %}
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+
+                    </a>
+
+                </div>
+                <div class="logo-element">
+
+                </div>
+
+            </li>
+            <li>
+                <a href="{% url 'Index' %}">
+                    <i class="fa fa-dashboard"></i>
+                    <span class="nav-label">主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-users"></i>
+                    <span class="nav-label">用户管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'prime:userlist' %}">用户列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.prime.add_user %}
+                    <!--
+                    <li>
+                        <a href="{% url 'prime:useradd' %}">添加用户</a>
+                    </li>-->
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-inbox"></i>
+                    <span class="nav-label">资产管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:assetlist' %}">资产列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_asset %}
+                    <li>
+                        <a href="{% url 'bumblebee:assetadd' %}">添加资产</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-edit"></i>
+                    <span class="nav-label">域名管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:domainlist' %}">域名列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_domain %}
+                    <li>
+                        <a href="{% url 'bumblebee:domainadd' %}">添加域名</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">机房管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:idclist' %}">机房列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_idc %}
+                    <li>
+                        <a href="{% url 'bumblebee:idcadd' %}">添加机房</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">业务线管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:businessdatail' %}">主业务列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_business %}
+                    <li>
+                        <a href="{% url 'bumblebee:businessadd' %}">主业务添加</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'bumblebee:subbisedatail' %}">子业务列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_subbusiness %}
+                    <li>
+                        <a href="{% url 'bumblebee:subbiseadd' %}">子业务添加</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'bumblebee:businfo' %}">业务线信息</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">项目管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:projectlist' %}">项目列表</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">数据库管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:dblist' %}">数据库列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_dba %}
+                    <li>
+                        <a href="{% url 'bumblebee:dbadd' %}">添加数据库信息</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">网卡管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:niclist' %}">网卡列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_nic %}
+                    <li>
+                        <a href="{% url 'bumblebee:nicadd' %}">添加网卡</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">用途管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:purposelist' %}">用途列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_purpose %}
+                    <li>
+                        <a href="{% url 'bumblebee:purposeadd' %}">添加用途</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">Raid卡管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:raidcardlist' %}">Raid卡列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_raidcard %}
+                    <li>
+                        <a href="{% url 'bumblebee:raidcardadd' %}">添加Raid卡</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'bumblebee:raidtypelist' %}">Raid卡类型列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_raidtype %}
+                    <li>
+                        <a href="{% url 'bumblebee:raidtypeadd' %}">添加Raid卡类型</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">应用服务监控</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:appslist' %}">应用服务监控列表</a>
+                    </li>
+                    {% if request.user.is_superuser or perms.bumblebee.add_apps %}
+                    <li>
+                        <a href="{% url 'bumblebee:appsadd' %}">添加应用服务监控</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-globe"></i>
+                    <span class="nav-label">堡垒机</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{% url 'bumblebee:fort' %}">激活重置账户</a>
+                    </li>
+                </ul>
+            </li>
+            {% if request.user.is_superuser or perms.bumblebee.view_outip %}
+            <li>
+                <a href="#">
+                    <i class="fa fa fa-edit"></i>
+                    <span class="nav-label">IP管理</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    {% if request.user.is_superuser or perms.bumblebee.view_outip %}
+                    <li>
+                        <a href="{% url 'bumblebee:outiplist' %}">外网IP列表</a>
+                    </li>
+                    {% endif %}
+                    {% if request.user.is_superuser or perms.bumblebee.add_outip %}
+                    <li>
+                        <a href="{% url 'bumblebee:outipadd' %}">添加外网IP</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
+        </ul>
+
+    </div>
+</nav>

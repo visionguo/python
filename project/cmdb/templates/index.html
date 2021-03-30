@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% block breadcrumb %}
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-success pull-right"></span>
+                        <h5>服务器总数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ server_count }}</h1>
+                        <div class="stat-percent font-bold text-success">
+                            <!--<i class="fa fa-bolt"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-info pull-right"></span>
+                        <h5>物理机</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ pm_count }}</h1>
+                        <div class="stat-percent font-bold text-info">
+                            <!--<i class="fa fa-level-up"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary pull-right"></span>
+                        <h5>虚拟机</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ vm_count }}</h1>
+                        <div class="stat-percent font-bold text-navy">
+                            <!--<i class="fa fa-level-up"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>XenServer</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ xen_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>earthworm项目数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ earthworm_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>新零售服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ nr_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>智能电销服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ kf_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>智能平台服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ ai_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>车后服务服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ am_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>智能创新服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ iip_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>金融服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ jr_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>数据平台服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ bi_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>大交易增长平台服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ trade_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>基础架构服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ infra_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>新车服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ nc_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>车速拍服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ c2b_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>共享平台服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ sp_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>质量保障服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ qa_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>运维部服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ op_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>信息安全部服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ sec_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>技术保障部服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ it_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>无线技术部服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ wx_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-danger pull-right"></span>
+                        <h5>云平台服务器数</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <h1 class="no-margins">{{ med_count }}</h1>
+                        <div class="stat-percent font-bold text-danger">
+                            <!--<i class="fa fa-level-down"></i>-->
+                        </div>
+                        <small>总数</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
