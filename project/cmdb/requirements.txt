@@ -11,4 +11,4 @@ Pygments==2.2.0
 pyldap==3.0.0.post1
 PyMySQL==0.8.0
 python-ldap==3.1.0
-requests==2.19.1
+requests==2.20.0
