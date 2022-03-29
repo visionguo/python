@@ -6,7 +6,7 @@ djangorestframework==3.8.2
 gunicorn==19.8.1
 ldap3==2.4
 Markdown==2.6.11
-paramiko==2.4.1
+paramiko==2.10.1
 Pygments==2.2.0
 pyldap==3.0.0.post1
 PyMySQL==0.8.0
